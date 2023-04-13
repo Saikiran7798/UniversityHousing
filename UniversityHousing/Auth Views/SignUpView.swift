@@ -10,9 +10,9 @@ import SwiftUI
 struct SignUpView: View {
     @State private var emailId = ""
     @State private var password = ""
-    @EnvironmentObject var user : User
-    @EnvironmentObject var ownerDetails: OwnerDetails
-    @EnvironmentObject var customerDetails : CustomerDetails
+    @EnvironmentObject var user : UserSignUp
+    @EnvironmentObject var ownerDetails: OwnerDetailsSignUp
+    @EnvironmentObject var customerDetails : CustomerDetailsSignUp
     @State var isOwner = false
     @State var isCustomer = false
     var body: some View {
@@ -77,8 +77,8 @@ struct SignUpView: View {
 struct SignUpView_Previews: PreviewProvider {
     static var previews: some View {
         SignUpView()
-            .environmentObject(User())
-            .environmentObject(OwnerDetails())
-            .environmentObject(CustomerDetails())
+            .environmentObject(UserSignUp())
+            .environmentObject(OwnerDetailsSignUp())
+            .environmentObject(CustomerDetailsSignUp())
     }
 }

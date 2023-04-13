@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct ThankyouView: View {
-    @EnvironmentObject var user: User
-    @EnvironmentObject var ownerDetails : OwnerDetails
-    @EnvironmentObject var customerDetails : CustomerDetails
+    @EnvironmentObject var user: UserSignUp
+    @EnvironmentObject var ownerDetails : OwnerDetailsSignUp
+    @EnvironmentObject var customerDetails : CustomerDetailsSignUp
     @State var isLogin = false
     var body: some View {
             VStack{
@@ -30,8 +30,8 @@ struct ThankyouView: View {
 struct ThankyouView_Previews: PreviewProvider {
     static var previews: some View {
         ThankyouView()
-            .environmentObject(OwnerDetails())
-            .environmentObject(User())
-            .environmentObject(CustomerDetails())
+            .environmentObject(OwnerDetailsSignUp())
+            .environmentObject(UserSignUp())
+            .environmentObject(CustomerDetailsSignUp())
     }
 }

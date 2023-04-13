@@ -13,15 +13,19 @@ struct UniversityHousingApp: App {
     init(){
         FirebaseApp.configure()
     }
-    @StateObject private var ownerDetails = OwnerDetails()
-    @StateObject private var user = User()
-    @StateObject private var customerDetails = CustomerDetails()
+    @StateObject private var ownerDetails = OwnerDetailsSignUp()
+    @StateObject private var user = UserSignUp()
+    @StateObject private var customerDetails = CustomerDetailsSignUp()
+    @StateObject private var propertyDetails = PropertyDetailsSignUp()
+    @StateObject private var userSignin = UserSignin()
     var body: some Scene {
         WindowGroup {
             LoginView()
                 .environmentObject(ownerDetails)
                 .environmentObject(user)
                 .environmentObject(customerDetails)
+                .environmentObject(propertyDetails)
+                .environmentObject(userSignin)
         }
     }
 }

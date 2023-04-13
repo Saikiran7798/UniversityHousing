@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct OwnerDetailsView: View {
-    @EnvironmentObject var ownerDetails : OwnerDetails
-    @EnvironmentObject var user: User
+    @EnvironmentObject var ownerDetails : OwnerDetailsSignUp
+    @EnvironmentObject var user: UserSignUp
     @Environment(\.presentationMode) var presentationMode
     @State var isthankYouView = false
     var body: some View {
@@ -100,7 +100,7 @@ struct OwnerDetailsView: View {
 
 struct OwnerDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        OwnerDetailsView().environmentObject(OwnerDetails())
-            .environmentObject(User())
+        OwnerDetailsView().environmentObject(OwnerDetailsSignUp())
+            .environmentObject(UserSignUp())
     }
 }

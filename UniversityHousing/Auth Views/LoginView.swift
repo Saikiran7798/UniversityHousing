@@ -12,7 +12,7 @@ struct LoginView: View {
     @State var password = ""
     @State var isOwner = false
     @State var isCustomer = false
-    @EnvironmentObject var user: User
+    @EnvironmentObject var user: UserSignin
     var body: some View {
         NavigationView{
             VStack(spacing: 20){
@@ -41,19 +41,26 @@ struct LoginView: View {
                     Text("Don't have an account? Sign Up")
                 }
                 Button("SIGN IN"){
-                    /*FirestoreRequests.shared.userSignIn(emailId: emailId, password: password){ result in
-                        if result == "Owner" {
-                            isOwner = true
+                    Task(priority: .background) {
+                        let (userType, userID) : (String, String) = try await FirestoreRequests.shared.userSignIn(emailId: emailId, password: password)
+                        DispatchQueue.main.async {
+                            if userType == "Customer" {
+                                isCustomer = true
+                            }
+                            else {
+                                isOwner = true
+                            }
+                            self.user.userType = userType
+                            self.user.userId = userID
                         }
-                        else {
-                            isCustomer = true
-                        }
-                    }*/
-                    print("hi user \(user.userId)")
+                    }
                 }
                 .padding()
                 .background(.blue)
                 .foregroundColor(.black)
+                NavigationLink(destination: OwnerMainView(), isActive: $isOwner, label: {
+                    EmptyView()
+                })
             }
             .padding()
         }
@@ -64,6 +71,6 @@ struct LoginView: View {
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
         LoginView()
-            .environmentObject(User())
+            .environmentObject(UserSignin())
     }
 }

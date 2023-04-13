@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct CustomerDetailsView: View {
-    @EnvironmentObject var customerDetails : CustomerDetails
-    @EnvironmentObject var user : User
+    @EnvironmentObject var customerDetails : CustomerDetailsSignUp
+    @EnvironmentObject var user : UserSignUp
     @State var isThankyouView = false
     var body: some View {
             VStack(spacing: 10){
@@ -50,7 +50,7 @@ struct CustomerDetailsView: View {
 struct CustomerDetailsView_Previews: PreviewProvider {
     static var previews: some View {
         CustomerDetailsView()
-            .environmentObject(CustomerDetails())
-            .environmentObject(User())
+            .environmentObject(CustomerDetailsSignUp())
+            .environmentObject(UserSignUp())
     }
 }
