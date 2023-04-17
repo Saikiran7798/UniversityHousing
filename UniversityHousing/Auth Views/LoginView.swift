@@ -61,6 +61,9 @@ struct LoginView: View {
                 NavigationLink(destination: OwnerMainView(), isActive: $isOwner, label: {
                     EmptyView()
                 })
+                NavigationLink(destination: CustomerView(), isActive: $isCustomer, label: {
+                    EmptyView()
+                })
             }
             .padding()
         }

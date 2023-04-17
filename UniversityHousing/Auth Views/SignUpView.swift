@@ -46,9 +46,15 @@ struct SignUpView: View {
                     }
                 }
                 Button("Sign Up"){
-                    FirestoreRequests.shared.userSignUP(emailId: emailId, password: password, userType: user.userType) { uid in
+                    FirestoreRequests.shared.userSignUP(emailId: emailId, password: password, userType: user.userType) { uid, emailID in
                         self.user.userId = uid
                         print("Hi, user id is \(uid)")
+                        if user.userType == "Owner"{
+                            self.ownerDetails.emailId = emailID
+                        }
+                        else{
+                            self.customerDetails.emailId = emailID
+                        }
                     }
                     if user.userType == "Owner" {
                         isOwner = true

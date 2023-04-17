@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		4E07A39929DE685D00DF7B20 /* ThankyouView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E07A39829DE685D00DF7B20 /* ThankyouView.swift */; };
 		4E25F86229E8B8E40064FC98 /* CustomerFirestoreRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E25F86129E8B8E40064FC98 /* CustomerFirestoreRequests.swift */; };
+		4E25F86829E928600064FC98 /* CustomerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E25F86729E928600064FC98 /* CustomerView.swift */; };
+		4E25F86A29E928FD0064FC98 /* CustomerViewRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E25F86929E928FD0064FC98 /* CustomerViewRow.swift */; };
+		4E27FDB929ECDFEB00BF5B2C /* PropertyDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E27FDB829ECDFEB00BF5B2C /* PropertyDetailView.swift */; };
 		4E654D7829E26E420097D79E /* AddPropertyDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E654D7729E26E420097D79E /* AddPropertyDetails.swift */; };
 		4E6934E629E6088100ADDAD2 /* OwnerPropertyRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6934E529E6088100ADDAD2 /* OwnerPropertyRow.swift */; };
 		4E6934E829E6220100ADDAD2 /* OwnerMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6934E729E6220100ADDAD2 /* OwnerMainView.swift */; };
@@ -34,6 +37,9 @@
 /* Begin PBXFileReference section */
 		4E07A39829DE685D00DF7B20 /* ThankyouView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThankyouView.swift; sourceTree = "<group>"; };
 		4E25F86129E8B8E40064FC98 /* CustomerFirestoreRequests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerFirestoreRequests.swift; sourceTree = "<group>"; };
+		4E25F86729E928600064FC98 /* CustomerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerView.swift; sourceTree = "<group>"; };
+		4E25F86929E928FD0064FC98 /* CustomerViewRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerViewRow.swift; sourceTree = "<group>"; };
+		4E27FDB829ECDFEB00BF5B2C /* PropertyDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyDetailView.swift; sourceTree = "<group>"; };
 		4E654D7729E26E420097D79E /* AddPropertyDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPropertyDetails.swift; sourceTree = "<group>"; };
 		4E6934E529E6088100ADDAD2 /* OwnerPropertyRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerPropertyRow.swift; sourceTree = "<group>"; };
 		4E6934E729E6220100ADDAD2 /* OwnerMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerMainView.swift; sourceTree = "<group>"; };
@@ -96,6 +102,7 @@
 				4E6934E729E6220100ADDAD2 /* OwnerMainView.swift */,
 				4E6934EE29E6831E00ADDAD2 /* OwnerPropertiesView.swift */,
 				4ED1301029DCEF81009E4238 /* OwnerDetailsView.swift */,
+				4E654D7729E26E420097D79E /* AddPropertyDetails.swift */,
 			);
 			path = OwnerViews;
 			sourceTree = "<group>";
@@ -104,6 +111,9 @@
 			isa = PBXGroup;
 			children = (
 				4ED1301229DD1D6B009E4238 /* CustomerDetailsView.swift */,
+				4E25F86729E928600064FC98 /* CustomerView.swift */,
+				4E25F86929E928FD0064FC98 /* CustomerViewRow.swift */,
+				4E27FDB829ECDFEB00BF5B2C /* PropertyDetailView.swift */,
 			);
 			path = CustomerViews;
 			sourceTree = "<group>";
@@ -136,7 +146,6 @@
 				4E9E1CAC29DA543800B014C8 /* GoogleService-Info.plist */,
 				4E9E1CA029DA405300B014C8 /* Assets.xcassets */,
 				4E9E1CA229DA405300B014C8 /* Preview Content */,
-				4E654D7729E26E420097D79E /* AddPropertyDetails.swift */,
 			);
 			path = UniversityHousing;
 			sourceTree = "<group>";
@@ -243,8 +252,11 @@
 				4E6934E629E6088100ADDAD2 /* OwnerPropertyRow.swift in Sources */,
 				4ED1301329DD1D6B009E4238 /* CustomerDetailsView.swift in Sources */,
 				4E9E1CB429DA57F400B014C8 /* FirestoreRequests.swift in Sources */,
+				4E25F86A29E928FD0064FC98 /* CustomerViewRow.swift in Sources */,
+				4E25F86829E928600064FC98 /* CustomerView.swift in Sources */,
 				4E25F86229E8B8E40064FC98 /* CustomerFirestoreRequests.swift in Sources */,
 				4ED1301129DCEF81009E4238 /* OwnerDetailsView.swift in Sources */,
+				4E27FDB929ECDFEB00BF5B2C /* PropertyDetailView.swift in Sources */,
 				4E07A39929DE685D00DF7B20 /* ThankyouView.swift in Sources */,
 				4E654D7829E26E420097D79E /* AddPropertyDetails.swift in Sources */,
 				4ED1300729DCB840009E4238 /* RadioButton.swift in Sources */,

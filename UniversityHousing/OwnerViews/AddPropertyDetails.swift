@@ -178,7 +178,7 @@ struct AddPropertyDetails: View {
                     }
                     TextField("Enter Property Description", text: $propertyDetails.description)
                         .padding()
-                        .padding(.bottom, 100)
+                        //.padding(.bottom, 100)
                         .overlay(
                             RoundedRectangle(cornerRadius: 10)
                                 .stroke(lineWidth: 2)

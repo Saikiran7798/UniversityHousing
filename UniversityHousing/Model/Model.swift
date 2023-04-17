@@ -18,6 +18,7 @@ class OwnerDetailsSignUp: ObservableObject {
     @Published var city = ""
     @Published var state = ""
     @Published var zipcode = ""
+    var emailId = ""
     
     func toDictionary() -> [String : Any] {
         return[
@@ -28,7 +29,8 @@ class OwnerDetailsSignUp: ObservableObject {
             "aptNo" : aptNo,
             "city" : city,
             "state" : state,
-            "zipcode" : zipcode
+            "zipcode" : zipcode,
+            "emailId" : emailId
         ]
     }
     
@@ -41,6 +43,7 @@ class OwnerDetailsSignUp: ObservableObject {
         city = ""
         state = ""
         zipcode = ""
+        emailId = ""
     }
 }
 
@@ -64,7 +67,8 @@ class CustomerDetailsSignUp: ObservableObject {
         return [
             "firstName" : firstName,
             "lastName" : lastName,
-            "phoneNumber" : phoneNumber
+            "phoneNumber" : phoneNumber,
+            "emailId" : emailId
         ]
     }
     
@@ -73,6 +77,7 @@ class CustomerDetailsSignUp: ObservableObject {
         firstName = ""
         lastName = ""
         phoneNumber = ""
+        emailId = ""
     }
 }
 
@@ -139,10 +144,13 @@ struct PropertyDetail : Hashable {
 }
 
 struct customerPropertyDetail : Hashable {
+    var ownerID: String
     var propertyID: String
     var title : String
     var propertyImageURL : URL
     var bedrooms : Int
     var rent : Int
     var furnished : String
+    var bathrooms: Int
+    var houseType : String
 }

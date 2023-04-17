@@ -15,7 +15,7 @@ import UIKit
 class FirestoreRequests {
     static let shared = FirestoreRequests()
     
-    func userSignUP(emailId: String, password: String, userType : String, completion: @escaping(String) -> Void) {
+    func userSignUP(emailId: String, password: String, userType : String, completion: @escaping(String, String) -> Void) {
         
         Auth.auth().createUser(withEmail: emailId, password: password) { result,error in
             
@@ -23,7 +23,7 @@ class FirestoreRequests {
                 print("Error creating User")
                 return
             }
-            completion(user.uid)
+            completion(user.uid, user.email!)
             let changeRequest = user.createProfileChangeRequest()
             changeRequest.displayName = userType
             changeRequest.commitChanges(completion: { error in
