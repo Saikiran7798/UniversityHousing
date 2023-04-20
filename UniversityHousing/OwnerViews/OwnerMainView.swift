@@ -13,6 +13,15 @@ struct OwnerMainView: View {
     @State var isAddProperty = false
     var body: some View {
         VStack {
+            HStack{
+                Spacer()
+                NavigationLink(destination: OwnerProfile(), label: {
+                    Image(systemName: "photo")
+                        .clipShape(Circle())
+                })
+            }
+            .padding()
+            .padding(.bottom,20)
             Text("My Properties")
                 .font(.title)
             ScrollView {
@@ -45,6 +54,7 @@ struct OwnerMainView: View {
                 }
             }
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 

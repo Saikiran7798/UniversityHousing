@@ -226,4 +226,11 @@ struct CustomerProfile : Codable {
     var phoneNumber : String
 }
 
+struct OwnerProfileDetails : Codable {
+    var emailId : String
+    var firstName : String
+    var lastName : String
+    var phoneNumber : String
+}
+
 

@@ -1,17 +1,15 @@
 //
-//  ProfileView.swift
+//  OwnerProfile.swift
 //  UniversityHousing
 //
-//  Created by Saikiran Reddy Doddeni on 4/19/23.
+//  Created by Saikiran Reddy Doddeni on 4/20/23.
 //
 
 import SwiftUI
-import UIKit
-import PhotosUI
 
-struct ProfileView: View {
+struct OwnerProfile: View {
     @EnvironmentObject var user : UserSignin
-    @State var customerDetails : CustomerProfile?
+    @State var ownerDetails : OwnerProfileDetails?
     @State var isLoginView = false
     @State var url : URL?
     @State var isProfileImage = false
@@ -41,17 +39,17 @@ struct ProfileView: View {
                 
             }
             HStack{
-                Text("Name: \(customerDetails?.firstName ?? "") \(customerDetails?.firstName ?? "")")
+                Text("Name: \(ownerDetails?.firstName ?? "") \(ownerDetails?.firstName ?? "")")
                 Spacer()
             }
             .padding()
             HStack{
-                Text("EmailId: \(customerDetails?.emailId ?? "")")
+                Text("EmailId: \(ownerDetails?.emailId ?? "")")
                 Spacer()
             }
             .padding()
             HStack{
-                Text("Phone Number: \(customerDetails?.phoneNumber ?? "")")
+                Text("Phone Number: \(ownerDetails?.phoneNumber ?? "")")
                 Spacer()
             }
             .padding()
@@ -69,10 +67,10 @@ struct ProfileView: View {
         .onAppear(){
             Task(priority: .background){
                 do{
-                    let profile = try await CustomerFireStoreRequests.shared.getCustomerDetails(userId: user.userId)
-                    let url = try await CustomerFireStoreRequests.shared.getCustomerImage(userId: user.userId)
+                    let profile = try await FirestoreRequests.shared.getOwnerDetails(userId: user.userId)
+                    let url = try await FirestoreRequests.shared.getOwnerImage(userId: user.userId)
                     DispatchQueue.main.async {
-                        self.customerDetails = profile!
+                        self.ownerDetails = profile!
                         self.url = url ?? nil
                     }
                 }catch{
@@ -84,9 +82,9 @@ struct ProfileView: View {
     }
 }
 
-struct ProfileView_Previews: PreviewProvider {
+struct OwnerProfile_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileView()
+        OwnerProfile()
             .environmentObject(UserSignin())
     }
 }

@@ -156,5 +156,49 @@ class FirestoreRequests {
         }
         return downloadURL!
     }
+    
+    func getOwnerDetails(userId: String) async throws -> OwnerProfileDetails?{
+        let db = Firestore.firestore()
+        let ownerRef = db.collection("owner").document("\(userId)")
+        do {
+            let document = try await ownerRef.getDocument()
+            let data = try? JSONSerialization.data(withJSONObject: document.data() ?? [:])
+            let decoder = JSONDecoder()
+            let ownerDetails = try decoder.decode(OwnerProfileDetails.self, from: data!)
+            return ownerDetails
+        }catch{
+            print("Error Retrieving Customer \(error)")
+            throw error
+        }
+    }
+    
+    func uploadOwnerProfileImage(userId : String , photo : Data, completion: @escaping(Bool) -> Void){
+        var isUploaded = false
+        let storageRef = Storage.storage().reference().child("OwnerProfile/\(userId).jpg")
+        let metaData = StorageMetadata()
+        metaData.contentType = "image/jpeg"
+        storageRef.putData(photo, metadata: metaData) { _, error in
+            if let error = error {
+                print("error uploading image: \(error)")
+                completion(false)
+            }
+            else{
+                print("uploaded data")
+                completion(true)
+            }
+        }
+    }
+    
+    func getOwnerImage(userId: String) async throws -> URL? {
+        let storageRef = Storage.storage().reference().child("OwnerProfile/\(userId).jpg")
+        do {
+            let url = try await storageRef.downloadURL()
+            return url
+        } catch{
+            print("Eroor getting image")
+            return nil
+        }
+    }
+
 }
 

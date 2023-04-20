@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4E07A39929DE685D00DF7B20 /* ThankyouView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E07A39829DE685D00DF7B20 /* ThankyouView.swift */; };
+		4E1427D529F1E148004A3C4F /* ProfileImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1427D429F1E148004A3C4F /* ProfileImage.swift */; };
+		4E1427D729F1FCDD004A3C4F /* OwnerProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1427D629F1FCDD004A3C4F /* OwnerProfile.swift */; };
 		4E25F86229E8B8E40064FC98 /* CustomerFirestoreRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E25F86129E8B8E40064FC98 /* CustomerFirestoreRequests.swift */; };
 		4E25F86829E928600064FC98 /* CustomerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E25F86729E928600064FC98 /* CustomerView.swift */; };
 		4E25F86A29E928FD0064FC98 /* CustomerViewRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E25F86929E928FD0064FC98 /* CustomerViewRow.swift */; };
@@ -42,6 +44,8 @@
 
 /* Begin PBXFileReference section */
 		4E07A39829DE685D00DF7B20 /* ThankyouView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThankyouView.swift; sourceTree = "<group>"; };
+		4E1427D429F1E148004A3C4F /* ProfileImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImage.swift; sourceTree = "<group>"; };
+		4E1427D629F1FCDD004A3C4F /* OwnerProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerProfile.swift; sourceTree = "<group>"; };
 		4E25F86129E8B8E40064FC98 /* CustomerFirestoreRequests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerFirestoreRequests.swift; sourceTree = "<group>"; };
 		4E25F86729E928600064FC98 /* CustomerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerView.swift; sourceTree = "<group>"; };
 		4E25F86929E928FD0064FC98 /* CustomerViewRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerViewRow.swift; sourceTree = "<group>"; };
@@ -113,6 +117,7 @@
 			children = (
 				4E6934E529E6088100ADDAD2 /* OwnerPropertyRow.swift */,
 				4E6934E729E6220100ADDAD2 /* OwnerMainView.swift */,
+				4E1427D629F1FCDD004A3C4F /* OwnerProfile.swift */,
 				4E6934EE29E6831E00ADDAD2 /* OwnerPropertiesView.swift */,
 				4ED1301029DCEF81009E4238 /* OwnerDetailsView.swift */,
 				4E654D7729E26E420097D79E /* AddPropertyDetails.swift */,
@@ -126,6 +131,7 @@
 				4ED1301229DD1D6B009E4238 /* CustomerDetailsView.swift */,
 				4E25F86729E928600064FC98 /* CustomerView.swift */,
 				4EDA86FE29F0B44B00537502 /* ProfileView.swift */,
+				4E1427D429F1E148004A3C4F /* ProfileImage.swift */,
 				4EDA86FC29F0993300537502 /* SearchBar.swift */,
 				4EF1D58329EF2DF00014261D /* FiltersView.swift */,
 				4EF1D58729EF54800014261D /* SliderView.swift */,
@@ -275,6 +281,7 @@
 				4E25F86A29E928FD0064FC98 /* CustomerViewRow.swift in Sources */,
 				4E25F86829E928600064FC98 /* CustomerView.swift in Sources */,
 				4E25F86229E8B8E40064FC98 /* CustomerFirestoreRequests.swift in Sources */,
+				4E1427D729F1FCDD004A3C4F /* OwnerProfile.swift in Sources */,
 				4EF1D58829EF54800014261D /* SliderView.swift in Sources */,
 				4ED1301129DCEF81009E4238 /* OwnerDetailsView.swift in Sources */,
 				4E27FDB929ECDFEB00BF5B2C /* PropertyDetailView.swift in Sources */,
@@ -285,6 +292,7 @@
 				4E9E1CB829DA60AF00B014C8 /* LoginView.swift in Sources */,
 				4E6934E829E6220100ADDAD2 /* OwnerMainView.swift in Sources */,
 				4EF1D58629EF31E60014261D /* Checkbox.swift in Sources */,
+				4E1427D529F1E148004A3C4F /* ProfileImage.swift in Sources */,
 				4ED1300F29DCEDC4009E4238 /* Model.swift in Sources */,
 				4EDA86FF29F0B44B00537502 /* ProfileView.swift in Sources */,
 				4E9E1C9D29DA405200B014C8 /* UniversityHousingApp.swift in Sources */,

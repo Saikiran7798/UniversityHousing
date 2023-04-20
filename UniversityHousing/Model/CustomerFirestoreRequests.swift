@@ -160,4 +160,32 @@ class CustomerFireStoreRequests {
         }
     }
     
+    func uploadCustomerProfileImage(userId : String , photo : Data, completion: @escaping(Bool) -> Void){
+        var isUploaded = false
+        let storageRef = Storage.storage().reference().child("CustomerProfile/\(userId).jpg")
+        let metaData = StorageMetadata()
+        metaData.contentType = "image/jpeg"
+        storageRef.putData(photo, metadata: metaData) { _, error in
+            if let error = error {
+                print("error uploading image: \(error)")
+                completion(false)
+            }
+            else{
+                print("uploaded data")
+                completion(true)
+            }
+        }
+    }
+    
+    func getCustomerImage(userId: String) async throws -> URL? {
+        let storageRef = Storage.storage().reference().child("CustomerProfile/\(userId).jpg")
+        do {
+            let url = try await storageRef.downloadURL()
+            return url
+        } catch{
+            print("Eroor getting image")
+            return nil
+        }
+    }
+    
 }
