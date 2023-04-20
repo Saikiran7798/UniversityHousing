@@ -18,6 +18,7 @@ struct UniversityHousingApp: App {
     @StateObject private var customerDetails = CustomerDetailsSignUp()
     @StateObject private var propertyDetails = PropertyDetailsSignUp()
     @StateObject private var userSignin = UserSignin()
+    @StateObject private var filters = Filters()
     var body: some Scene {
         WindowGroup {
             LoginView()
@@ -26,6 +27,7 @@ struct UniversityHousingApp: App {
                 .environmentObject(customerDetails)
                 .environmentObject(propertyDetails)
                 .environmentObject(userSignin)
+                .environmentObject(filters)
         }
     }
 }

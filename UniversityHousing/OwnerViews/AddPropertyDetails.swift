@@ -16,6 +16,9 @@ struct AddPropertyDetails: View {
     @State var selectedItemData =  [Data]()
     @State var isOwnerView = false
     @State var isprogressView = false
+    @State var utilitiesCount = 1
+    @State var utiliTiesArray : [String] = [""]
+    @State var isAddProperty = true
     var body: some View {
         if isprogressView {
             ProgressView()
@@ -173,16 +176,25 @@ struct AddPropertyDetails: View {
                 }
                 VStack{
                     HStack{
-                        Text("Description of the Property")
+                        Text("Please Enter  Property Utilities")
                         Spacer()
                     }
-                    TextField("Enter Property Description", text: $propertyDetails.description)
-                        .padding()
-                        //.padding(.bottom, 100)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(lineWidth: 2)
-                                .foregroundColor(.black))
+                    ForEach(utiliTiesArray.indices, id:\.self){ index in
+                        HStack{
+                            TextField("Enter Property Description", text: $utiliTiesArray[index])
+                                .padding()
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(lineWidth: 2)
+                                        .foregroundColor(.black))
+                            if utiliTiesArray[index] != ""{
+                                Button("Add"){
+                                    utiliTiesArray.append("")
+                                    propertyDetails.utilities.append(utiliTiesArray[index])
+                                }
+                            }
+                        }
+                    }
                 }
                 PhotosPicker( selection: $selectedItem, matching: .images, preferredItemEncoding: .automatic, photoLibrary: .shared()){
                     Text("Select Property photos")
@@ -218,6 +230,7 @@ struct AddPropertyDetails: View {
                             print("Error: \(error)")
                         }
                     }
+                    //print("Utilities Array is \(utiliTiesArray)")
                 }
                 .padding()
                 .background(.blue)

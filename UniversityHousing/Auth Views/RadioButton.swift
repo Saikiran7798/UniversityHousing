@@ -12,14 +12,13 @@ struct RadioButton: View {
     let selected: Bool
     let action: () -> Void
     var body: some View {
-        Button(action: action){
+        Button(action : action){
             HStack{
                 Image(systemName: selected ? "largecircle.fill.circle" : "circle")
                 Text(title)
             }
             
         }
-        
     }
 }
 

@@ -117,16 +117,16 @@ class FirestoreRequests {
             return false
         }
     }
-    func getOwnerProperties(userID: String) async throws -> [PropertyDetail] {
+    func getOwnerProperties(userID: String) async throws -> [OwnerPropertyDetail] {
         let db = Firestore.firestore()
         let ownerRef = db.collection("owner").document(userID)
-        var propertyDetailArray : [PropertyDetail] = []
+        var propertyDetailArray : [OwnerPropertyDetail] = []
         do {
             let snapshot = try await db.collection("propertyDetails").whereField("ownerReference", isEqualTo: ownerRef).getDocuments()
             for document in snapshot.documents {
                 let data = document.data()
                 let url = try await self.getPropertyImage(userID: userID, proprtyID: document.documentID)
-                let newPropertyDetail = PropertyDetail(propertyID: document.documentID, title: data["streetAddress"] as? String ?? "nil", propertyImageURL: url,
+                let newPropertyDetail = OwnerPropertyDetail(propertyID: document.documentID, title: data["streetAddress"] as? String ?? "nil", propertyImageURL: url,
                                                        bedrooms: data["bedrooms"] as? Int ?? 0, rent: data["rent"] as? Int ?? 0, furnished : data["furnished"] as? String ?? "nil")
                 propertyDetailArray.append(newPropertyDetail)
             }

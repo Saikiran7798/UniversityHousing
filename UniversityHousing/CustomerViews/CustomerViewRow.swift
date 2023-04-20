@@ -7,6 +7,7 @@
 
 import SwiftUI
 import URLImage
+import MapKit
 
 struct CustomerViewRow: View {
     var url : URL
@@ -25,7 +26,7 @@ struct CustomerViewRow: View {
                 case .success(let image):
                     image
                         .resizable()
-                        .frame(width: 150,height: 150)
+                        .frame(height: 150)
                 default:
                     Image(systemName: "photo")
                         .resizable()
@@ -41,14 +42,14 @@ struct CustomerViewRow: View {
                 HStack{
                     Image(systemName: "square.fill")
                         .frame(width: 10, height: 10)
-                        .foregroundColor(.red)
+                        .foregroundColor(.orange)
                     Text("\(bedrooms) bedrooms")
                         .foregroundColor(.gray)
                 }
                 HStack{
                     Image(systemName: "square.fill")
                         .frame(width: 10, height: 10)
-                        .foregroundColor(.red)
+                        .foregroundColor(.orange)
                     Text("\(bathrooms) bathrooms")
                         .foregroundColor(.gray)
                 }
@@ -56,27 +57,26 @@ struct CustomerViewRow: View {
             HStack{
                 Image(systemName: "square.fill")
                     .frame(width: 10, height: 10)
-                    .foregroundColor(.red)
+                    .foregroundColor(.orange)
                 Text("\(furnished)")
                     .foregroundColor(.gray)
-                    .minimumScaleFactor(0.5)
                 Image(systemName: "square.fill")
                     .frame(width: 10, height: 10)
-                    .foregroundColor(.red)
+                    .foregroundColor(.orange)
                 Text("House Type: \(houseType)")
                     .foregroundColor(.gray)
-                    .minimumScaleFactor(0.5)
             }
             HStack{
                 Spacer()
                 Text("$\(rent)")
-                    .foregroundColor(.blue)
+                    .foregroundColor(Color.blue.opacity(0.8))
                     .bold()
             }
 
         }
         .frame(maxWidth: .infinity)
         .padding()
+        .background(Color.gray.opacity(0.1))
     }
 }
 

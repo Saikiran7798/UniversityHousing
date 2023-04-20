@@ -9,34 +9,29 @@ import SwiftUI
 import URLImage
 struct OwnerMainView: View {
     @EnvironmentObject var user: UserSignin
-    @State var propDetails : [PropertyDetail] = []
+    @State var propDetails : [OwnerPropertyDetail] = []
     @State var isAddProperty = false
     var body: some View {
         VStack {
-            if propDetails.count == 0 {
-                ProgressView()
-            }
-            else {
-                Text("My Properties")
-                    .font(.title)
-                ScrollView {
-                    ForEach(propDetails, id: \.self) { item in
-                        OwnerPropertiesView(title: item.title, url: item.propertyImageURL, bedrooms: item.bedrooms, rent: item.rent, furnished: item.furnished)
-                    }
+            Text("My Properties")
+                .font(.title)
+            ScrollView {
+                ForEach(propDetails, id: \.self) { item in
+                    OwnerPropertiesView(title: item.title, url: item.propertyImageURL, bedrooms: item.bedrooms, rent: item.rent, furnished: item.furnished)
                 }
-                .frame(height: 250)
-                Spacer()
-                Button("Add Property"){
-                    isAddProperty = true
-                }
-                .padding()
-                .background(.blue)
-                .foregroundColor(.black)
-                NavigationLink(destination: AddPropertyDetails(), isActive: $isAddProperty, label: {
-                    EmptyView()
-                })
-                Spacer()
             }
+            .frame(height: 250)
+            Spacer()
+            Button("Add Property"){
+                isAddProperty = true
+            }
+            .padding()
+            .background(.blue)
+            .foregroundColor(.black)
+            NavigationLink(destination: AddPropertyDetails(), isActive: $isAddProperty, label: {
+                EmptyView()
+            })
+            Spacer()
         }
         .onAppear(){
             Task(priority: .background){
