@@ -26,10 +26,13 @@ struct OwnerMainView: View {
                 .font(.title)
             ScrollView {
                 ForEach(propDetails, id: \.self) { item in
-                    OwnerPropertiesView(title: item.title, url: item.propertyImageURL, bedrooms: item.bedrooms, rent: item.rent, furnished: item.furnished)
+                    OwnerPropertiesView(title: item.title, url: item.propertyImageURL, bedrooms: item.bedrooms, rent: item.rent, furnished: item.furnished, proprtyId: item.propertyID, ownerID: user.userId, onDelete: { index in
+                        propDetails.remove(at: index)
+                    }, index: propDetails.firstIndex(of: item)!)
+                        
                 }
             }
-            .frame(height: 250)
+            .frame(height: 400)
             Spacer()
             Button("Add Property"){
                 isAddProperty = true

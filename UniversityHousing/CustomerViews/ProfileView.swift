@@ -41,7 +41,7 @@ struct ProfileView: View {
                 
             }
             HStack{
-                Text("Name: \(customerDetails?.firstName ?? "") \(customerDetails?.firstName ?? "")")
+                Text("Name: \(customerDetails?.firstName ?? "") \(customerDetails?.lastName ?? "")")
                 Spacer()
             }
             .padding()

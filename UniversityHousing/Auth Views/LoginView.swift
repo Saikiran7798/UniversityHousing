@@ -40,6 +40,9 @@ struct LoginView: View {
                 NavigationLink(destination: SignUpView()){
                     Text("Don't have an account? Sign Up")
                 }
+                NavigationLink(destination: ResetPasswordView(), label: {
+                    Text("Forgot password")
+                })
                 Button("SIGN IN"){
                     Task(priority: .background) {
                         let (userType, userID) : (String, String) = try await FirestoreRequests.shared.userSignIn(emailId: emailId, password: password)

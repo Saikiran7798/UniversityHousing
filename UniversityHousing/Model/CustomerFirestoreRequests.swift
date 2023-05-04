@@ -34,7 +34,7 @@ class CustomerFireStoreRequests {
        return ownerId
     }
     
-    func getAllProperties() async throws -> [ALlproperties]{
+    func getAllProperties() async -> [ALlproperties]{
         let db = Firestore.firestore()
         let propRef = db.collection("propertyDetails")
         var customerPropertyDetails : [ALlproperties] = []
@@ -85,6 +85,31 @@ class CustomerFireStoreRequests {
         return downloadURLS
     }
     
+    func getImage(ownerID: String, propertyId: String) async throws -> [UIImage] {
+        let storageRef = Storage.storage().reference()
+        let imageRef = storageRef.child("\(ownerID)/\(propertyId)")
+        var downloadedImage : [UIImage] = []
+        let group = DispatchGroup()
+        do{
+            let result = try await imageRef.listAll()
+            for item in result.items {
+                group.enter()
+                let itemPath = item.fullPath
+                let propertyImageRef = storageRef.child("\(itemPath)")
+                let downloadURL = try await propertyImageRef.downloadURL()
+                let (data, _) = try await URLSession.shared.data(from: downloadURL)
+                downloadedImage.append(UIImage(data: data)!)
+                group.leave()
+            }
+            group.wait()
+        }
+        catch{
+            print("Error downloading URLs \(error)")
+            throw error
+        }
+        return downloadedImage
+    }
+    
     func getPropertyDetails(propertyId : String) async throws -> CustomerPropertyDetail?{
         let db = Firestore.firestore()
         let propRef = db.collection("propertyDetails").document("\(propertyId)")
@@ -92,6 +117,7 @@ class CustomerFireStoreRequests {
             let document = try await propRef.getDocument()
             var docData = document.data()
             docData?.removeValue(forKey: "ownerReference")
+            docData?.removeValue(forKey: "location")
             let data = try? JSONSerialization.data(withJSONObject: docData ?? [:])
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
@@ -121,10 +147,10 @@ class CustomerFireStoreRequests {
         }
     }
     
-    func getMapAddress(street: String, city: String, state: String, zipcode: String) async throws -> CLLocationCoordinate2D? {
+    func getMapAddress(street: String, city: String, state: String) async throws -> CLLocationCoordinate2D? {
         var coordinate : CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
         let geocoder = CLGeocoder()
-        let address = "\(street), \(city), \(state), \(zipcode), United States"
+        let address = "\(street), \(city), \(state), United States"
         do {
             let placemarks =  try await geocoder.geocodeAddressString(address)
             var location : CLLocation?
@@ -142,6 +168,16 @@ class CustomerFireStoreRequests {
         }catch{
             print("Error retreieving location \(error)")
             throw error
+        }
+    }
+    
+    func ReverseGeoCode(location : CLLocation) async -> String {
+        let geoCoder = CLGeocoder()
+        do {
+            let placemark = try await geoCoder.reverseGeocodeLocation(location)
+            return placemark[0].postalCode ?? ""
+        } catch {
+            return ""
         }
     }
     
@@ -184,6 +220,18 @@ class CustomerFireStoreRequests {
             return url
         } catch{
             print("Eroor getting image")
+            return nil
+        }
+    }
+    
+    func getPropertyLocation(propertyId : String) async -> GeoPoint? {
+        let db = Firestore.firestore()
+        let docRef = db.collection("propertyDetails").document("\(propertyId)")
+        do {
+            let document  = try await docRef.getDocument()
+            let data = document.data()
+            return data?["location"] as? GeoPoint ?? nil
+        } catch {
             return nil
         }
     }

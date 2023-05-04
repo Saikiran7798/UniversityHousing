@@ -8,6 +8,8 @@
 import SwiftUI
 import PhotosUI
 import FirebaseFirestore
+import MapKit
+import CoreLocation
 
 struct AddPropertyDetails: View {
     @EnvironmentObject var user: UserSignin
@@ -19,15 +21,23 @@ struct AddPropertyDetails: View {
     @State var utilitiesCount = 1
     @State var utiliTiesArray : [String] = [""]
     @State var isAddProperty = true
+    @ObservedObject var localSearchCompleter = LocalSearch()
+    @State var searchResults : [MKLocalSearchCompletion] = []
+    @State var showScrollView = false
+    @State var isAlert = false
+    @State var distance = 0.0
     var body: some View {
         if isprogressView {
             ProgressView()
         } else
         {
             ScrollView{
+                VStack{
+                    
+                }
                 Text("Add Property Details")
-                    .font(.title)
-                    .padding()
+                        .font(.title)
+                        .padding()
                 VStack {
                     HStack{
                         Text("Street Address")
@@ -39,6 +49,52 @@ struct AddPropertyDetails: View {
                             RoundedRectangle(cornerRadius: 10)
                                 .stroke(lineWidth: 2)
                                 .foregroundColor(.black))
+                        .onChange(of: propertyDetails.streetAddress){ newValue in
+                            showScrollView = true
+                            if showScrollView {
+                                localSearchCompleter.search(query: newValue)
+                                searchResults = localSearchCompleter.searchResults
+                                print("local count is \(searchResults.count)")
+                            }
+                        }
+                    if searchResults.count != 0 {
+                        ScrollView{
+                            VStack(spacing: 20){
+                                ForEach(searchResults, id: \.self){ result in
+                                    HStack{
+                                        Text("\(result.title), \(result.subtitle)")
+                                            .onTapGesture {
+                                                propertyDetails.streetAddress = result.title
+                                                let subString = result.subtitle.components(separatedBy: ",")
+                                                propertyDetails.city = subString[0]
+                                                propertyDetails.state = subString[1]
+                                                searchResults = []
+                                                showScrollView = false
+                                                Task(priority: .background){
+                                                    do {
+                                                        let loc =  try await CustomerFireStoreRequests.shared.getMapAddress(street: result.title, city: subString[0], state: subString[1])
+                                                        if let loc = loc {
+                                                            let clLoc = CLLocation(latitude: loc.latitude, longitude: loc.longitude)
+                                                            let zip = await CustomerFireStoreRequests.shared.ReverseGeoCode(location: clLoc)
+                                                            DispatchQueue.main.async {
+                                                                propertyDetails.zipcode = zip
+                                                                propertyDetails.location = GeoPoint(latitude: loc.latitude, longitude: loc.longitude)
+                                                            }
+                                                        }
+                                                    } catch {
+                                                        print("Couldn't get location")
+                                                    }
+                                                }
+                                            }
+                                        Spacer()
+                                    }
+                                    .padding(.leading, 10)
+                                }
+                            }
+                        }
+                        .frame(height: 150)
+                        .frame(maxWidth: .infinity)
+                    }
                     HStack{
                         Text("Apt No")
                         Spacer()
@@ -128,52 +184,52 @@ struct AddPropertyDetails: View {
                             RoundedRectangle(cornerRadius: 10)
                                 .stroke(lineWidth: 2)
                                 .foregroundColor(.black))
-                    VStack {
-                        HStack {
-                            Text("Furnish Status")
-                            Spacer()
-                            Picker("Furnish Status", selection: $propertyDetails.furnished) {
-                                Text("Fully Furnished").tag("Fully Furnished")
-                                Text("Semi Furnished").tag("Semi Furnished")
-                                Text("Not Furnished").tag("Not Furnished")
-                            }
-                        }
-                        .padding()
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(lineWidth: 2)
-                                .foregroundColor(.black))
-                        HStack {
-                            Text("Property Type")
-                            Spacer()
-                            Picker("Property Type", selection: $propertyDetails.houseType) {
-                                Text("Apartment").tag("Apartment")
-                                Text("Studio").tag("Studio")
-                                Text("Individual House").tag("Individual House")
-                            }
-                        }
-                        .padding()
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(lineWidth: 2)
-                                .foregroundColor(.black))
-                        HStack {
-                            Text("Pets")
-                            Spacer()
-                            Picker("Pets", selection: $propertyDetails.petsAllowed) {
-                                Text("Yes").tag(true)
-                                Text("No").tag(false)
-                            }
-                        }
-                        .padding()
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(lineWidth: 2)
-                                .foregroundColor(.black))
-                    }
-                    .pickerStyle(.menu)
-                    .padding()
                 }
+                VStack {
+                    HStack {
+                        Text("Furnish Status")
+                        Spacer()
+                        Picker("Furnish Status", selection: $propertyDetails.furnished) {
+                            Text("Fully Furnished").tag("Fully Furnished")
+                            Text("Semi Furnished").tag("Semi Furnished")
+                            Text("Not Furnished").tag("Not Furnished")
+                        }
+                    }
+                    .padding()
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(lineWidth: 2)
+                            .foregroundColor(.black))
+                    HStack {
+                        Text("Property Type")
+                        Spacer()
+                        Picker("Property Type", selection: $propertyDetails.houseType) {
+                            Text("Apartment").tag("Apartment")
+                            Text("Studio").tag("Studio")
+                            Text("Individual House").tag("Individual House")
+                        }
+                    }
+                    .padding()
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(lineWidth: 2)
+                            .foregroundColor(.black))
+                    HStack {
+                        Text("Pets")
+                        Spacer()
+                        Picker("Pets", selection: $propertyDetails.petsAllowed) {
+                            Text("Yes").tag(true)
+                            Text("No").tag(false)
+                        }
+                    }
+                    .padding()
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(lineWidth: 2)
+                            .foregroundColor(.black))
+                }
+                .pickerStyle(.menu)
+                .padding()
                 VStack{
                     HStack{
                         Text("Please Enter  Property Utilities")
@@ -215,23 +271,36 @@ struct AddPropertyDetails: View {
                     }
                 }
                 Button("Submit") {
-                    isprogressView = true
-                    Task {
-                        do {
-                            let propID = try await FirestoreRequests.shared.uploadPropertyDetails(propetyDetails: propertyDetails, userID: user.userId, selectedDataItem: selectedItemData)
-                            DispatchQueue.main.async {
-                                self.propertyDetails.reset()
-                                if propID {
-                                    isOwnerView = true
-                                    isprogressView = false
+                    //isprogressView = true
+                    let syrcLoc = CLLocation(latitude: 43.0389, longitude: -76.1341)
+                    let propLoc = CLLocation(latitude: propertyDetails.location.latitude, longitude: propertyDetails.location.longitude)
+                    let distance = syrcLoc.distance(from: propLoc) * 0.000621371
+                    self.distance = distance
+                    if distance > 10 {
+                        isAlert = true
+                    }
+                    if !isAlert {
+                        isprogressView = true
+                        Task {
+                            do {
+                                let propID = try await FirestoreRequests.shared.uploadPropertyDetails(propetyDetails: propertyDetails, userID: user.userId, selectedDataItem: selectedItemData)
+                                DispatchQueue.main.async {
+                                    self.propertyDetails.reset()
+                                    if propID {
+                                        isOwnerView = true
+                                        isprogressView = false
+                                    }
                                 }
+                            } catch {
+                                print("Error: \(error)")
                             }
-                        } catch {
-                            print("Error: \(error)")
                         }
                     }
-                    //print("Utilities Array is \(utiliTiesArray)")
                 }
+                .alert(isPresented: $isAlert, content: {
+                    Alert(title: Text("Alert"), message: Text(" Your Property Distance is greater Than 10 miles. Please Select a Property Closer to the university, Distance is \(distance), \(propertyDetails.location.latitude) \(propertyDetails.location.longitude) ").foregroundColor(.red), dismissButton: .default(Text("OK")))
+                        
+                })
                 .padding()
                 .background(.blue)
                 .foregroundColor(.black)

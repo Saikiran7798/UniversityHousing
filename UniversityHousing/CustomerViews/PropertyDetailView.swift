@@ -17,30 +17,31 @@ struct PropertyDetailView: View {
     @State var location : CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
     @State var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194), span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
     @State var annotation : Place?
+    @State var downloadImages : [UIImage] = []
+    @State var showImage = false
+    @State var count = 0
+    @State var currentIndex = 0
     var body: some View {
         ScrollView{
-            if downLoadURLS.count == 0 {
+            if downloadImages.count == 0 {
                 ProgressView()
             }
             else{
                 VStack(spacing: 30){
                     ScrollView(.horizontal){
                         HStack{
-                            ForEach(downLoadURLS, id: \.self){ URL in
-                                AsyncImage(url: URL){ path in
-                                    switch path {
-                                    case .empty:
-                                        ProgressView()
-                                    case .success(let image):
-                                        image
-                                            .resizable()
-                                            .frame(width: 150, height: 150)
-                                    default:
-                                        Image(systemName: "photo")
-                                            .resizable()
-                                            .frame(width: 300, height: 200)
+                            ForEach(downloadImages.indices, id: \.self) { index in
+                                Image(uiImage: downloadImages[index])
+                                    .resizable()
+                                    .frame(width: 150, height: 150)
+                                    .onTapGesture {
+                                        showImage = true
+                                        currentIndex = index
                                     }
-                                }
+                                    .fullScreenCover(isPresented: $showImage, content: {
+                                        FullImage(propImage: $downloadImages, currentIndex: $currentIndex, viewType: "NoEdit" )
+                                    })
+                                
                             }
                         }
                     }
@@ -130,14 +131,24 @@ struct PropertyDetailView: View {
                             }
                         }
                     }
-                    Map(coordinateRegion: $region, annotationItems: [annotation!]){ place in
-                        MapAnnotation(coordinate: place.coordinate){
-                            Image(systemName: "mappin")
-                                        .foregroundColor(.red)
-                                        .font(.title)
-                        }
-                    }
-                    .frame(height: 200)
+                    Button(action: {
+                        let appleMapsURL = URL(string: "maps://?saddr=&daddr=\(location.latitude),\(location.longitude)")
+                        if let url = appleMapsURL, UIApplication.shared.canOpenURL(url) {
+                                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                            print("Entered location")
+                            } else {
+                                print("Error: Invalid URL or Maps app is not installed.")
+                            }
+                            }) {
+                                Map(coordinateRegion: $region, annotationItems: [annotation!]){ place in
+                                    MapAnnotation(coordinate: place.coordinate){
+                                        Image(systemName: "mappin")
+                                                    .foregroundColor(.red)
+                                                    .font(.title)
+                                    }
+                                }
+                            }
+                            .frame(height: 200)
                     Spacer()
                 }
             }
@@ -146,19 +157,24 @@ struct PropertyDetailView: View {
         .onAppear(){
             Task(priority: .background){
                 do{
-                    let downloadURlS = try await CustomerFireStoreRequests.shared.getPropertyImages(ownerID: ownerId, propertyId: propertyID)
+                    //let downloadURlS = try await CustomerFireStoreRequests.shared.getPropertyImages(ownerID: ownerId, propertyId: propertyID)
+                    let downLoadImages = try await CustomerFireStoreRequests.shared.getImage(ownerID: ownerId, propertyId: propertyID)
                     let propDetail = try await CustomerFireStoreRequests.shared.getPropertyDetails(propertyId: propertyID)
                     let ownerDetails = try await CustomerFireStoreRequests.shared.getOwnerDetails(ownerId: ownerId)
-                    let loc = try await CustomerFireStoreRequests.shared.getMapAddress(street: propDetail?.streetAddress ?? "", city: propDetail?.city ?? "", state: propDetail?.state ?? "", zipcode: propDetail?.zipcode ?? "")
+                    //let loc = try await CustomerFireStoreRequests.shared.getMapAddress(street: propDetail?.streetAddress ?? "", city: propDetail?.city ?? "", state: propDetail?.state ?? "")
+                    let loc = await CustomerFireStoreRequests.shared.getPropertyLocation(propertyId: "\(propertyID)")
                     DispatchQueue.main.async {
-                        self.downLoadURLS = downloadURlS
+                        //self.downLoadURLS = downloadURlS
+                        self.downloadImages = downLoadImages
+                        //self.showImage = Array(repeating: false, count: downLoadImages.count)
                         if let propDetail = propDetail {
                             self.propertyDetail = propDetail
                         }
                         if let ownerDetail = ownerDetails{
                             self.ownerDetails = ownerDetail
                         }
-                        if let location = loc {
+                        if let geoLoc = loc {
+                            self.location = CLLocationCoordinate2D(latitude: geoLoc.latitude, longitude: geoLoc.longitude)
                             self.region = MKCoordinateRegion(center: location, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
                             self.annotation = Place(name: propDetail?.streetAddress ?? "", coordinate: location)
                         }

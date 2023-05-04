@@ -39,7 +39,7 @@ struct OwnerProfile: View {
                 
             }
             HStack{
-                Text("Name: \(ownerDetails?.firstName ?? "") \(ownerDetails?.firstName ?? "")")
+                Text("Name: \(ownerDetails?.firstName ?? "") \(ownerDetails?.lastName ?? "")")
                 Spacer()
             }
             .padding()

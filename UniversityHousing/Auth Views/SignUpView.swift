@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct SignUpView: View {
     @State private var emailId = ""
@@ -65,7 +66,7 @@ struct SignUpView: View {
                 }
                 .padding()
                 .background(.blue)
-                .foregroundColor(.black)
+                .foregroundColor(.black)                
                 NavigationLink(destination: OwnerDetailsView(), isActive:$isOwner, label: {
                         EmptyView()
                     })

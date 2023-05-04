@@ -92,10 +92,11 @@ class PropertyDetailsSignUp : ObservableObject {
     @Published var bedrooms = 0
     @Published var bathrooms = 0
     @Published var rent = 0
-    @Published var furnished = ""
+    @Published var furnished = "Fully Furnished"
     @Published var houseType = "Apartment"
     @Published var petsAllowed = false
     var ownerReference : DocumentReference?
+    var location : GeoPoint = GeoPoint(latitude: 0.0, longitude: 0.0)
     @Published var utilities : [String] = []
     
     func toDictionary() -> [String : Any] {
@@ -112,7 +113,9 @@ class PropertyDetailsSignUp : ObservableObject {
             "houseType" : houseType,
             "petsAllowed" : petsAllowed,
             "ownerReference" : ownerReference!,
-            "utilities": utilities
+            "utilities": utilities,
+            "location" : location
+            
         ]
     }
     
@@ -126,7 +129,7 @@ class PropertyDetailsSignUp : ObservableObject {
          bathrooms = 0
          rent = 0
          furnished = "Fully Furnished"
-         houseType = ""
+         houseType = "Apartment"
          petsAllowed = false
          utilities = []
     }
@@ -158,7 +161,6 @@ struct OwnerPropertyDetail : Hashable {
     var bedrooms : Int
     var rent : Int
     var furnished : String
-    //var bathrooms : Int
 }
 
 struct ALlproperties : Hashable {
@@ -231,6 +233,15 @@ struct OwnerProfileDetails : Codable {
     var firstName : String
     var lastName : String
     var phoneNumber : String
+}
+
+class OwnerPropertyEdit : ObservableObject {
+    @Published var bedrooms = 0
+    @Published var bathrooms = 0
+    @Published var rent = 0
+    @Published var furnished = "Fully Furnished"
+    @Published var houseType = "Apartment"
+    @Published var petsAllowed = false
 }
 
 

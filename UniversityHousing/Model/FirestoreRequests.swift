@@ -50,7 +50,6 @@ class FirestoreRequests {
                 usertype = "Owner"
                 userID = user!.user.uid
             }
-            
         } catch let error as NSError {
             let authError = error as? AuthErrorCode
             print("Error while signing in \(authError)")
@@ -117,7 +116,7 @@ class FirestoreRequests {
             return false
         }
     }
-    func getOwnerProperties(userID: String) async throws -> [OwnerPropertyDetail] {
+    func getOwnerProperties(userID: String) async -> [OwnerPropertyDetail] {
         let db = Firestore.firestore()
         let ownerRef = db.collection("owner").document(userID)
         var propertyDetailArray : [OwnerPropertyDetail] = []
@@ -126,8 +125,7 @@ class FirestoreRequests {
             for document in snapshot.documents {
                 let data = document.data()
                 let url = try await self.getPropertyImage(userID: userID, proprtyID: document.documentID)
-                let newPropertyDetail = OwnerPropertyDetail(propertyID: document.documentID, title: data["streetAddress"] as? String ?? "nil", propertyImageURL: url,
-                                                       bedrooms: data["bedrooms"] as? Int ?? 0, rent: data["rent"] as? Int ?? 0, furnished : data["furnished"] as? String ?? "nil")
+                let newPropertyDetail = OwnerPropertyDetail(propertyID: document.documentID, title: data["streetAddress"] as? String ?? "nil", propertyImageURL: url,bedrooms: data["bedrooms"] as? Int ?? 0, rent: data["rent"] as? Int ?? 0, furnished : data["furnished"] as? String ?? "nil")
                 propertyDetailArray.append(newPropertyDetail)
             }
             
@@ -198,6 +196,65 @@ class FirestoreRequests {
             print("Eroor getting image")
             return nil
         }
+    }
+    
+    func deleteProperty(proprtyID: String, userId: String) async throws {
+        let db = Firestore.firestore()
+        let propRef = db.collection("propertyDetails").document("\(proprtyID)")
+        let storageRef = Storage.storage().reference().child("\(userId)/\(proprtyID)")
+        do {
+            try await propRef.delete()
+            let result = try await storageRef.listAll()
+            for item in  result.items {
+                try await item.delete()
+            }
+        }
+        catch{
+            print("Error deleting property \(error)")
+            throw error
+        }
+    }
+    
+    func editPropertyDetails(propertyId : String, updateData : [String : Any], deletedImages : [String]) async {
+        let db = Firestore.firestore()
+        let docRef = db.collection("propertyDetails").document("\(propertyId)")
+        let storageRef = Storage.storage().reference()
+        do {
+            try await docRef.updateData(updateData)
+            if deletedImages.count != 0 {
+                for item in deletedImages {
+                    let imageRef = storageRef.child("\(item)")
+                    try await imageRef.delete()
+                }
+            }
+        } catch {
+            print("Error updating Data")
+        }
+    }
+    
+    func getImageWithId(ownerID: String, propertyId: String) async throws -> [String : UIImage] {
+        let storageRef = Storage.storage().reference()
+        let imageRef = storageRef.child("\(ownerID)/\(propertyId)")
+        var imageWithPath : [String : UIImage] = [:]
+        let group = DispatchGroup()
+        do{
+            let result = try await imageRef.listAll()
+            for item in result.items {
+                group.enter()
+                let itemPath = item.fullPath
+                let propertyImageRef = storageRef.child("\(itemPath)")
+                let downloadURL = try await propertyImageRef.downloadURL()
+                let (data, _) = try await URLSession.shared.data(from: downloadURL)
+                imageWithPath["\(itemPath)"] = UIImage(data: data)!
+                group.leave()
+            }
+            group.wait()
+        }
+        catch{
+            print("Error downloading URLs \(error)")
+            throw error
+        }
+        return imageWithPath
     }
 
 }
