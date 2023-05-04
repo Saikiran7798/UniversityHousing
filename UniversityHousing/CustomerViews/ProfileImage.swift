@@ -26,20 +26,18 @@ struct ProfileImage: View {
                     Label("Profile", systemImage: "chevron.left")
                 }
                 Spacer()
-                PhotosPicker(selection: $profileItem, matching: .images, preferredItemEncoding: .automatic, photoLibrary: .shared()){
+                PhotosPicker(selection: $profileItem, matching: .images){
                     Text("Edit")
                 }
-                .onChange(of: profileItem){ newValue in
-                    newValue?.loadTransferable(type: Data.self){ result in
-                        switch result {
-                        case .success(let data):
-                            if let data = data {
-                                self.photoData = data
-                                newImage = Image(uiImage: UIImage(data: data)!)
+                .onChange(of: profileItem){ _ in
+                    Task {
+                        if let data = try? await profileItem?.loadTransferable(type: Data.self) {
+                            if let uiImage = UIImage(data: data) {
+                                newImage = Image(uiImage: uiImage)
+                                return
                             }
-                        case .failure(let failure):
-                            print("Error \(failure.localizedDescription)")
                         }
+                        print("failed")
                     }
                 }
             }

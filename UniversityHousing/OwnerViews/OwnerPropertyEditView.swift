@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct OwnerPropertyEditView: View {
     @ObservedObject var ownerproperty : OwnerPropertyEdit = OwnerPropertyEdit()
@@ -18,6 +19,9 @@ struct OwnerPropertyEditView: View {
     @State var showImage = false
     @State var imagekey = ""
     @State var deletedImagesPaths : [String] = []
+    @State var photoPickerItem = [PhotosPickerItem]()
+    @State var photoPickerData = [Data]()
+    @State var newImages : [UIImage] = []
     var body: some View {
         ScrollView{
             VStack(spacing : 20) {
@@ -140,14 +144,51 @@ struct OwnerPropertyEditView: View {
                     }
                 }
                 
+                VStack{
+                    PhotosPicker(selection: $photoPickerItem, matching: .images) {
+                        Text("Select new Images to upload")
+                    }
+                    .onChange(of: photoPickerItem){ _ in
+                        photoPickerData.removeAll()
+                        newImages.removeAll()
+                        for item in photoPickerItem {
+                            item.loadTransferable(type: Data.self){ result in
+                                switch result {
+                                case .success(let data):
+                                    if let data = data {
+                                        photoPickerData.append(data)
+                                        newImages.append(UIImage(data: data)!)
+                                    }
+                                case .failure(let error):
+                                    print("failed \(error.localizedDescription)")
+                                }
+                            }
+                        }
+                    }
+                }
+                if newImages.count != 0 {
+                    Text("Newly Added Images")
+                    ScrollView(.horizontal){
+                        HStack {
+                            ForEach(newImages, id: \.self){ item in
+                                Image(uiImage: item)
+                                    .resizable()
+                                    .frame(width: 150, height: 150)
+                            }
+                        }
+                    }
+                }
                 VStack {
                     Button(action: {
-                        if updatedData.isEmpty {
+                        if updatedData.isEmpty && newImages.count == 0 {
                            isAlert = true
                         }
                         else {
                             Task(priority: .background){
                                 await FirestoreRequests.shared.editPropertyDetails(propertyId : "\(propertyID)", updateData : updatedData, deletedImages: deletedImagesPaths)
+                                if newImages.count != 0 {
+                                    await FirestoreRequests.shared.uploadNewImages(ownerID: "\(ownerID)", propertyId: "\(propertyID)", imageItems: photoPickerData)
+                                }
                             }
                         }
                     }, label: {

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4E07A39929DE685D00DF7B20 /* ThankyouView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E07A39829DE685D00DF7B20 /* ThankyouView.swift */; };
+		4E0B59482A042F3900CC4DAB /* MainTabbedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0B59472A042F3900CC4DAB /* MainTabbedView.swift */; };
 		4E1427D529F1E148004A3C4F /* ProfileImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1427D429F1E148004A3C4F /* ProfileImage.swift */; };
 		4E1427D729F1FCDD004A3C4F /* OwnerProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1427D629F1FCDD004A3C4F /* OwnerProfile.swift */; };
 		4E1D1E8D2A02FB9E001612F6 /* FullImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D1E8C2A02FB9E001612F6 /* FullImage.swift */; };
@@ -48,6 +49,7 @@
 
 /* Begin PBXFileReference section */
 		4E07A39829DE685D00DF7B20 /* ThankyouView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThankyouView.swift; sourceTree = "<group>"; };
+		4E0B59472A042F3900CC4DAB /* MainTabbedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabbedView.swift; sourceTree = "<group>"; };
 		4E1427D429F1E148004A3C4F /* ProfileImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImage.swift; sourceTree = "<group>"; };
 		4E1427D629F1FCDD004A3C4F /* OwnerProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerProfile.swift; sourceTree = "<group>"; };
 		4E1D1E8C2A02FB9E001612F6 /* FullImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullImage.swift; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 			children = (
 				4ED1301229DD1D6B009E4238 /* CustomerDetailsView.swift */,
 				4E25F86729E928600064FC98 /* CustomerView.swift */,
+				4E0B59472A042F3900CC4DAB /* MainTabbedView.swift */,
 				4EDA86FE29F0B44B00537502 /* ProfileView.swift */,
 				4E1427D429F1E148004A3C4F /* ProfileImage.swift */,
 				4EDA86FC29F0993300537502 /* SearchBar.swift */,
@@ -287,6 +290,7 @@
 				4E9E1CB629DA5FDA00B014C8 /* SignUpView.swift in Sources */,
 				4E6934EF29E6831E00ADDAD2 /* OwnerPropertiesView.swift in Sources */,
 				4ED1301329DD1D6B009E4238 /* CustomerDetailsView.swift in Sources */,
+				4E0B59482A042F3900CC4DAB /* MainTabbedView.swift in Sources */,
 				4EF1D58429EF2DF00014261D /* FiltersView.swift in Sources */,
 				4E9E1CB429DA57F400B014C8 /* FirestoreRequests.swift in Sources */,
 				4E25F86A29E928FD0064FC98 /* CustomerViewRow.swift in Sources */,
@@ -442,6 +446,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"UniversityHousing/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = UniversityHousing/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -470,6 +475,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"UniversityHousing/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = UniversityHousing/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

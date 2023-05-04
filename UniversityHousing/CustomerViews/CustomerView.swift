@@ -13,6 +13,7 @@ struct CustomerView: View {
     @EnvironmentObject var filter : Filters
     @State var isFilter = false
     @State var search = ""
+    @State var isSidemenu = false
     var body: some View {
         VStack {
             HStack{
@@ -57,9 +58,7 @@ struct CustomerView: View {
             else{
                 ScrollView{
                     ForEach(propertyDetail.filter({search.isEmpty ? true : $0.title.localizedCaseInsensitiveContains(search)}), id: \.self) { detail in
-                        NavigationLink(destination: PropertyDetailView(propertyID: detail.propertyID, ownerId: detail.ownerID), label: {
-                            CustomerViewRow(url: detail.propertyImageURL, title: detail.title, bedrooms: detail.bedrooms, rent: detail.rent, furnished: detail.furnished, bathrooms: detail.bathrooms, houseType: detail.houseType)
-                        })
+                        CustomerViewRow(url: detail.propertyImageURL, title: detail.title, bedrooms: detail.bedrooms, rent: detail.rent, furnished: detail.furnished, bathrooms: detail.bathrooms, houseType: detail.houseType, propertyID: detail.propertyID, ownerID: detail.ownerID)
                     }
                     
                 }

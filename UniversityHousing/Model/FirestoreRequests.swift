@@ -116,6 +116,18 @@ class FirestoreRequests {
             return false
         }
     }
+    
+    func uploadNewImages(ownerID: String, propertyId : String, imageItems : [Data]) async {
+        //let dispatchGroup = DispatchGroup()
+        for item in imageItems {
+            let storageRef = Storage.storage().reference().child("\(ownerID)/\(propertyId)/\(UUID().uuidString).jpg")
+            let metaData = StorageMetadata()
+            metaData.contentType = "image/jpeg"
+            //dispatchGroup.enter()
+            storageRef.putData(item, metadata: metaData)
+            //dispatchGroup.leave()
+        }
+    }
     func getOwnerProperties(userID: String) async -> [OwnerPropertyDetail] {
         let db = Firestore.firestore()
         let ownerRef = db.collection("owner").document(userID)

@@ -14,6 +14,7 @@ struct FullImageForDelete: View {
     @Binding var key : String
     @Binding var index : Int
     @State var showAlert = false
+    @State var isDeleting = false
     var onDelete : ((String) -> Void)
     @Environment(\.presentationMode) var presentationMode
     var body: some View {
@@ -32,8 +33,9 @@ struct FullImageForDelete: View {
                         }
                         else {
                             imageWithpaths.removeValue(forKey: key)
+                            isDeleting = true
                             onDelete(key)
-                            if index < imageWithpaths.count - 1 {
+                            if index < imageWithpaths.count {
                                 index += 1
                             }
                             else {
@@ -41,6 +43,7 @@ struct FullImageForDelete: View {
                             }
                             withAnimation{
                                 key = Array(imageWithpaths.keys)[index]
+                                isDeleting = false
                             }
                         }
                     }, label: {
@@ -52,6 +55,9 @@ struct FullImageForDelete: View {
                 Image(uiImage: imageWithpaths[key]!)
                     .resizable()
                     .scaledToFit()
+                    .offset(x: isDeleting ? -UIScreen.main.bounds.width : 0)
+                    .opacity(isDeleting ? 0 : 1)
+                    .animation(.easeInOut(duration: 0.3))
                 Spacer()
             }
             .alert(isPresented: $showAlert, content: {
