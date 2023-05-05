@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MapKit
+import MessageUI
 
 struct PropertyDetailView: View {
     var propertyID: String
@@ -21,6 +22,7 @@ struct PropertyDetailView: View {
     @State var showImage = false
     @State var count = 0
     @State var currentIndex = 0
+    @State private var isShowingMailView = false
     var body: some View {
         ScrollView{
             if downloadImages.count == 0 {
@@ -120,8 +122,19 @@ struct PropertyDetailView: View {
                                 Spacer()
                             }
                             HStack{
-                                Image(systemName: "envelope")
-                                Text("\(ownerDetails?.emailId ?? "")")
+                                Button(action: {
+                                    if MFMailComposeViewController.canSendMail(){
+                                        isShowingMailView.toggle()
+                                    }
+                                }, label: {
+                                    HStack{
+                                        Image(systemName: "envelope")
+                                        Text("\(ownerDetails?.emailId ?? "")")
+                                    }
+                                })
+                                .sheet(isPresented: $isShowingMailView){
+                                    MailView(isShowing: $isShowingMailView, recipients: ["\(ownerDetails?.emailId ?? "")"])
+                                }
                                 Spacer()
                             }
                             HStack{

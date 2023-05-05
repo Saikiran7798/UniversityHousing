@@ -32,7 +32,9 @@ struct FiltersView: View {
             }
             .padding()
             Button(){
-                isBathroom.toggle()
+                withAnimation(.easeInOut(duration: 0.3)){
+                    isBathroom.toggle()
+                }
             } label: {
                 HStack{
                     Text("Bathrooms")
@@ -121,7 +123,9 @@ struct FiltersView: View {
                 }
             }
             Button(){
-                isBedroom.toggle()
+                withAnimation(.easeInOut(duration: 0.5)){
+                    isBedroom.toggle()
+                }
             } label: {
                 HStack{
                     Text("Bedrooms")
@@ -220,7 +224,6 @@ struct FiltersView: View {
                 Button("Reset"){
                     filter.reset()
                     filter.dismissAction = "Reset"
-                    presentationMode.wrappedValue.dismiss()
                 }
                 .frame(width: 80, height: 50)
                 .foregroundColor(.blue)

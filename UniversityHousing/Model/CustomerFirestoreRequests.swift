@@ -197,7 +197,6 @@ class CustomerFireStoreRequests {
     }
     
     func uploadCustomerProfileImage(userId : String , photo : Data, completion: @escaping(Bool) -> Void){
-        var isUploaded = false
         let storageRef = Storage.storage().reference().child("CustomerProfile/\(userId).jpg")
         let metaData = StorageMetadata()
         metaData.contentType = "image/jpeg"
@@ -224,6 +223,18 @@ class CustomerFireStoreRequests {
         }
     }
     
+    func getMenuprofileImage(userId: String) async -> UIImage {
+        let storageRef = Storage.storage().reference().child("CustomerProfile/\(userId).jpg")
+        do {
+            let url = try await storageRef.downloadURL()
+            let (data, _) = try await URLSession.shared.data(from: url)
+            return UIImage(data: data)!
+        } catch {
+            print("Error")
+            return UIImage(systemName: "photo")!
+        }
+    }
+    
     func getPropertyLocation(propertyId : String) async -> GeoPoint? {
         let db = Firestore.firestore()
         let docRef = db.collection("propertyDetails").document("\(propertyId)")
@@ -233,6 +244,84 @@ class CustomerFireStoreRequests {
             return data?["location"] as? GeoPoint ?? nil
         } catch {
             return nil
+        }
+    }
+    
+    func setFavotiteproperty(userID: String, propertyID: String) async {
+        let db = Firestore.firestore()
+        let docRef = db.collection("propertyDetails").document("\(propertyID)")
+        do {
+            try await docRef.updateData(["favoritedBy" : FieldValue.arrayUnion(["\(userID)"])])
+        } catch {
+            print("Update Failed")
+        }
+    }
+    func deleteFavProperty(userID: String, propertyId : String) async {
+        let db = Firestore.firestore()
+        let docRef = db.collection("propertyDetails").document("\(propertyId)")
+        do {
+            try await docRef.updateData(["favoritedBy" : FieldValue.arrayRemove(["\(userID)"])])
+        } catch {
+            print("Update Failed")
+        }
+    }
+    
+    func isUserfavorite(userID: String, propertyID : String) async -> Bool {
+        let db = Firestore.firestore()
+        let docRef = db.collection("propertyDetails").document("\(propertyID)")
+        do {
+            let document = try await docRef.getDocument()
+            let data = document.data()
+            let userIDs = data?["favoritedBy"] as? [String] ?? []
+            if userIDs.contains("\(userID)") {
+                return true
+            }
+            else {
+                return false
+            }
+        } catch {
+            return false
+        }
+    }
+    
+    func getFavProperties(userID : String) async -> [ALlproperties]{
+        let db = Firestore.firestore()
+        let propRef = db.collection("propertyDetails").whereField("favoritedBy", arrayContains: "\(userID)")
+        var customerPropertyDetails : [ALlproperties] = []
+        let group = DispatchGroup()
+        do {
+            let querySnapshot = try await propRef.getDocuments()
+            for document in querySnapshot.documents{
+                group.enter()
+                let documentData = document.data()
+                print(document.data())
+                let ownerRef = documentData["ownerReference"] as? DocumentReference
+                print("Path is \(ownerRef?.documentID)")
+                let URL = URL(string: ownerRef?.documentID ?? "nil")
+                let ownerID = URL?.lastPathComponent
+                let propertyImageURL = try await FirestoreRequests.shared.getPropertyImage(userID: ownerID!, proprtyID: document.documentID)
+                let propertyDetails = ALlproperties(ownerID: ownerID!, propertyID: document.documentID, title: documentData["streetAddress"] as! String, propertyImageURL: propertyImageURL, bedrooms: documentData["bedrooms"] as! Int, rent: documentData["rent"] as! Int, furnished: documentData["furnished"] as! String, bathrooms: documentData["bathrooms"] as! Int, houseType: documentData["houseType"] as! String)
+                customerPropertyDetails.append(propertyDetails)
+                group.leave()
+            }
+            group.wait()
+        }catch {
+            print("Error Retrieving Properties")
+        }
+        return customerPropertyDetails
+    }
+    
+    func getUserName(userId : String) async -> String {
+        let db = Firestore.firestore()
+        let docRef = db.collection("customer").document("\(userId)")
+        do {
+            let document  = try await docRef.getDocument()
+            let data = document.data()
+            let firstName = data?["firstName"] as? String ?? ""
+            let lastName = data?["lastName"] as? String ?? ""
+            return firstName + " " + lastName
+        } catch {
+            return ""
         }
     }
     

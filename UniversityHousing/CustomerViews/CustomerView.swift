@@ -14,14 +14,17 @@ struct CustomerView: View {
     @State var isFilter = false
     @State var search = ""
     @State var isSidemenu = false
+    @Binding var presentSideMenu : Bool
+    @EnvironmentObject var userSignIn : UserSignin
     var body: some View {
         VStack {
             HStack{
+                Button(action: {
+                    presentSideMenu.toggle()
+                }, label: {
+                    Image(systemName: "line.3.horizontal")
+                })
                 SearchBar(searchText: $search)
-                NavigationLink(destination: ProfileView()){
-                    Image(systemName: "photo")
-                        .clipShape(Circle())
-                }
             }
             HStack{
                 Button("Filter"){
@@ -43,7 +46,13 @@ struct CustomerView: View {
                 .background(.blue)
                 .foregroundColor(.black)
                 Spacer()
+                Button(action: {
+                    
+                }, label: {
+                    Text("SortBy")
+                })
             }
+            .padding()
             if propertyDetail.count == 0  && allProperties.count == 0 {
                 Spacer()
                 ProgressView()
@@ -58,7 +67,7 @@ struct CustomerView: View {
             else{
                 ScrollView{
                     ForEach(propertyDetail.filter({search.isEmpty ? true : $0.title.localizedCaseInsensitiveContains(search)}), id: \.self) { detail in
-                        CustomerViewRow(url: detail.propertyImageURL, title: detail.title, bedrooms: detail.bedrooms, rent: detail.rent, furnished: detail.furnished, bathrooms: detail.bathrooms, houseType: detail.houseType, propertyID: detail.propertyID, ownerID: detail.ownerID)
+                        CustomerViewRow(url: detail.propertyImageURL, title: detail.title, bedrooms: detail.bedrooms, rent: detail.rent, furnished: detail.furnished, bathrooms: detail.bathrooms, houseType: detail.houseType, propertyID: detail.propertyID, ownerID: detail.ownerID, userID: "\(userSignIn.userId)")
                     }
                     
                 }
@@ -127,7 +136,8 @@ struct CustomerView: View {
 
 struct CustomerView_Previews: PreviewProvider {
     static var previews: some View {
-        CustomerView()
+        CustomerView(presentSideMenu: Binding.constant(false))
             .environmentObject(Filters())
+            .environmentObject(UserSignin())
     }
 }

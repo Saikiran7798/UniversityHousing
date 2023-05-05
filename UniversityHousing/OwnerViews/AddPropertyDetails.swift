@@ -10,22 +10,26 @@ import PhotosUI
 import FirebaseFirestore
 import MapKit
 import CoreLocation
+import UIKit
 
 struct AddPropertyDetails: View {
     @EnvironmentObject var user: UserSignin
     @EnvironmentObject var propertyDetails : PropertyDetailsSignUp
     @State var selectedItem =  [PhotosPickerItem]()
     @State var selectedItemData =  [Data]()
+    @State var selectedImages : [UIImage] = []
     @State var isOwnerView = false
     @State var isprogressView = false
-    @State var utilitiesCount = 1
     @State var utiliTiesArray : [String] = [""]
-    @State var isAddProperty = true
     @ObservedObject var localSearchCompleter = LocalSearch()
     @State var searchResults : [MKLocalSearchCompletion] = []
     @State var showScrollView = false
     @State var isAlert = false
     @State var distance = 0.0
+    @State var isAddRemove : [Bool] = [true]
+    @State var isOntapGesture = false
+    @State var oldStreetValue = ""
+    @State var isButtonDiabled = true
     var body: some View {
         if isprogressView {
             ProgressView()
@@ -50,14 +54,27 @@ struct AddPropertyDetails: View {
                                 .stroke(lineWidth: 2)
                                 .foregroundColor(.black))
                         .onChange(of: propertyDetails.streetAddress){ newValue in
-                            showScrollView = true
-                            if showScrollView {
+                            if !newValue.isEmpty {
+                                print("value is \(newValue)")
+                                withAnimation(.easeInOut(duration: 0.7)){
+                                    if isOntapGesture, oldStreetValue == newValue {
+                                        showScrollView = false
+                                    }
+                                    else {
+                                        showScrollView = true
+                                    }
+                                }
                                 localSearchCompleter.search(query: newValue)
                                 searchResults = localSearchCompleter.searchResults
-                                print("local count is \(searchResults.count)")
+                            }
+                            else {
+                                searchResults.removeAll()
+                                withAnimation(.easeInOut(duration: 1.0)){
+                                    showScrollView = false
+                                }
                             }
                         }
-                    if searchResults.count != 0 {
+                    if showScrollView {
                         ScrollView{
                             VStack(spacing: 20){
                                 ForEach(searchResults, id: \.self){ result in
@@ -69,7 +86,8 @@ struct AddPropertyDetails: View {
                                                 propertyDetails.city = subString[0]
                                                 propertyDetails.state = subString[1]
                                                 searchResults = []
-                                                showScrollView = false
+                                                isOntapGesture = true
+                                                oldStreetValue = propertyDetails.streetAddress
                                                 Task(priority: .background){
                                                     do {
                                                         let loc =  try await CustomerFireStoreRequests.shared.getMapAddress(street: result.title, city: subString[0], state: subString[1])
@@ -237,16 +255,30 @@ struct AddPropertyDetails: View {
                     }
                     ForEach(utiliTiesArray.indices, id:\.self){ index in
                         HStack{
-                            TextField("Enter Property Description", text: $utiliTiesArray[index])
+                            TextField("Enter Property Utilities", text: $utiliTiesArray[index])
                                 .padding()
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 10)
                                         .stroke(lineWidth: 2)
                                         .foregroundColor(.black))
-                            if utiliTiesArray[index] != ""{
-                                Button("Add"){
-                                    utiliTiesArray.append("")
-                                    propertyDetails.utilities.append(utiliTiesArray[index])
+                            if utiliTiesArray[index] != "" {
+                                if isAddRemove[index] {
+                                    Button(action: {
+                                        isAddRemove[index] = false
+                                        isAddRemove.append(true)
+                                        utiliTiesArray.append("")
+                                        propertyDetails.utilities.append(utiliTiesArray[index])
+                                    }, label: {
+                                        Text("Add")
+                                    })
+                                } else {
+                                    Button(action: {
+                                        isAddRemove.remove(at: index)
+                                        utiliTiesArray.remove(at: index)
+                                        propertyDetails.utilities.remove(at: index)
+                                    }, label: {
+                                        Text("remove")
+                                    })
                                 }
                             }
                         }
@@ -257,15 +289,29 @@ struct AddPropertyDetails: View {
                         .padding()
                 }
                 .onChange(of: selectedItem){ newItems in
+                    selectedItemData.removeAll()
+                    selectedImages.removeAll()
                     for item in selectedItem {
                         item.loadTransferable(type: Data.self) { result in
                             switch result {
                             case .success(let data):
                                 if let data = data {
                                     self.selectedItemData.append(data)
+                                    self.selectedImages.append(UIImage(data: data)!)
                                 }
                             case .failure(let failure):
                                 print("Error \(failure.localizedDescription)")
+                            }
+                        }
+                    }
+                }
+                if selectedImages.count != 0 {
+                    ScrollView(.horizontal){
+                        HStack{
+                            ForEach(selectedImages, id: \.self){ item in
+                                Image(uiImage: item)
+                                    .resizable()
+                                    .frame(width: 100, height: 100)
                             }
                         }
                     }
@@ -298,7 +344,7 @@ struct AddPropertyDetails: View {
                     }
                 }
                 .alert(isPresented: $isAlert, content: {
-                    Alert(title: Text("Alert"), message: Text(" Your Property Distance is greater Than 10 miles. Please Select a Property Closer to the university, Distance is \(distance), \(propertyDetails.location.latitude) \(propertyDetails.location.longitude) ").foregroundColor(.red), dismissButton: .default(Text("OK")))
+                    Alert(title: Text("Alert"), message: Text(" Your Property Distance is greater Than 10 miles. Please Select a Property Closer to the University").foregroundColor(.red), dismissButton: .default(Text("OK")))
                         
                 })
                 .padding()

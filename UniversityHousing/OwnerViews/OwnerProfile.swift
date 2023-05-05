@@ -77,7 +77,6 @@ struct OwnerProfile: View {
                     print("Error")
                 }
             }
-            print("Hi")
         }
     }
 }

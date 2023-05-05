@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		4E07A39929DE685D00DF7B20 /* ThankyouView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E07A39829DE685D00DF7B20 /* ThankyouView.swift */; };
 		4E0B59482A042F3900CC4DAB /* MainTabbedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0B59472A042F3900CC4DAB /* MainTabbedView.swift */; };
+		4E0B594A2A04356C00CC4DAB /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0B59492A04356C00CC4DAB /* SideMenu.swift */; };
+		4E0B594C2A043FAE00CC4DAB /* SideMenuContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0B594B2A043FAE00CC4DAB /* SideMenuContent.swift */; };
+		4E0B594E2A04738900CC4DAB /* FavoriteProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0B594D2A04738900CC4DAB /* FavoriteProperties.swift */; };
+		4E0B59502A047F3100CC4DAB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E0B594F2A047F3100CC4DAB /* MessageUI.framework */; };
+		4E0B59522A04824400CC4DAB /* MailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0B59512A04824400CC4DAB /* MailView.swift */; };
 		4E1427D529F1E148004A3C4F /* ProfileImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1427D429F1E148004A3C4F /* ProfileImage.swift */; };
 		4E1427D729F1FCDD004A3C4F /* OwnerProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1427D629F1FCDD004A3C4F /* OwnerProfile.swift */; };
 		4E1D1E8D2A02FB9E001612F6 /* FullImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D1E8C2A02FB9E001612F6 /* FullImage.swift */; };
@@ -50,6 +55,11 @@
 /* Begin PBXFileReference section */
 		4E07A39829DE685D00DF7B20 /* ThankyouView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThankyouView.swift; sourceTree = "<group>"; };
 		4E0B59472A042F3900CC4DAB /* MainTabbedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabbedView.swift; sourceTree = "<group>"; };
+		4E0B59492A04356C00CC4DAB /* SideMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenu.swift; sourceTree = "<group>"; };
+		4E0B594B2A043FAE00CC4DAB /* SideMenuContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuContent.swift; sourceTree = "<group>"; };
+		4E0B594D2A04738900CC4DAB /* FavoriteProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteProperties.swift; sourceTree = "<group>"; };
+		4E0B594F2A047F3100CC4DAB /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		4E0B59512A04824400CC4DAB /* MailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailView.swift; sourceTree = "<group>"; };
 		4E1427D429F1E148004A3C4F /* ProfileImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImage.swift; sourceTree = "<group>"; };
 		4E1427D629F1FCDD004A3C4F /* OwnerProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerProfile.swift; sourceTree = "<group>"; };
 		4E1D1E8C2A02FB9E001612F6 /* FullImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullImage.swift; sourceTree = "<group>"; };
@@ -89,6 +99,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E0B59502A047F3100CC4DAB /* MessageUI.framework in Frameworks */,
 				4E6AED1E29EE594500155970 /* CoreLocation.framework in Frameworks */,
 				4E6934ED29E679B300ADDAD2 /* URLImageStore in Frameworks */,
 				4E9E1CB029DA54BF00B014C8 /* FirebaseAuth in Frameworks */,
@@ -109,6 +120,7 @@
 				4E9E1CB529DA5FDA00B014C8 /* SignUpView.swift */,
 				4ED1300629DCB840009E4238 /* RadioButton.swift */,
 				4E1D1E922A0335C1001612F6 /* ResetPasswordView.swift */,
+				4EF1D58529EF31E60014261D /* Checkbox.swift */,
 			);
 			path = "Auth Views";
 			sourceTree = "<group>";
@@ -120,6 +132,7 @@
 				4E25F86129E8B8E40064FC98 /* CustomerFirestoreRequests.swift */,
 				4E21F86A2A01C7100016321E /* MKLocalSreach.swift */,
 				4E9E1CB329DA57F400B014C8 /* FirestoreRequests.swift */,
+				4E0B59512A04824400CC4DAB /* MailView.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -142,7 +155,9 @@
 			children = (
 				4ED1301229DD1D6B009E4238 /* CustomerDetailsView.swift */,
 				4E25F86729E928600064FC98 /* CustomerView.swift */,
+				4E0B59492A04356C00CC4DAB /* SideMenu.swift */,
 				4E0B59472A042F3900CC4DAB /* MainTabbedView.swift */,
+				4E0B594B2A043FAE00CC4DAB /* SideMenuContent.swift */,
 				4EDA86FE29F0B44B00537502 /* ProfileView.swift */,
 				4E1427D429F1E148004A3C4F /* ProfileImage.swift */,
 				4EDA86FC29F0993300537502 /* SearchBar.swift */,
@@ -152,7 +167,7 @@
 				4E27FDB829ECDFEB00BF5B2C /* PropertyDetailView.swift */,
 				4E1D1E8C2A02FB9E001612F6 /* FullImage.swift */,
 				4E1D1E8E2A032277001612F6 /* FullImageForDelete.swift */,
-				4EF1D58529EF31E60014261D /* Checkbox.swift */,
+				4E0B594D2A04738900CC4DAB /* FavoriteProperties.swift */,
 			);
 			path = CustomerViews;
 			sourceTree = "<group>";
@@ -200,6 +215,7 @@
 		4EA9667429E3FCC200BAE746 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4E0B594F2A047F3100CC4DAB /* MessageUI.framework */,
 				4E6AED1D29EE594500155970 /* CoreLocation.framework */,
 			);
 			name = Frameworks;
@@ -287,9 +303,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E0B594E2A04738900CC4DAB /* FavoriteProperties.swift in Sources */,
 				4E9E1CB629DA5FDA00B014C8 /* SignUpView.swift in Sources */,
 				4E6934EF29E6831E00ADDAD2 /* OwnerPropertiesView.swift in Sources */,
 				4ED1301329DD1D6B009E4238 /* CustomerDetailsView.swift in Sources */,
+				4E0B59522A04824400CC4DAB /* MailView.swift in Sources */,
 				4E0B59482A042F3900CC4DAB /* MainTabbedView.swift in Sources */,
 				4EF1D58429EF2DF00014261D /* FiltersView.swift in Sources */,
 				4E9E1CB429DA57F400B014C8 /* FirestoreRequests.swift in Sources */,
@@ -311,9 +329,11 @@
 				4E9E1CB829DA60AF00B014C8 /* LoginView.swift in Sources */,
 				4E6934E829E6220100ADDAD2 /* OwnerMainView.swift in Sources */,
 				4EF1D58629EF31E60014261D /* Checkbox.swift in Sources */,
+				4E0B594C2A043FAE00CC4DAB /* SideMenuContent.swift in Sources */,
 				4E1427D529F1E148004A3C4F /* ProfileImage.swift in Sources */,
 				4ED1300F29DCEDC4009E4238 /* Model.swift in Sources */,
 				4EDA86FF29F0B44B00537502 /* ProfileView.swift in Sources */,
+				4E0B594A2A04356C00CC4DAB /* SideMenu.swift in Sources */,
 				4E1D1E932A0335C1001612F6 /* ResetPasswordView.swift in Sources */,
 				4E9E1C9D29DA405200B014C8 /* UniversityHousingApp.swift in Sources */,
 			);
@@ -444,6 +464,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"UniversityHousing/Preview Content\"";
+				DEVELOPMENT_TEAM = P3WNX5V3SZ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = UniversityHousing/Info.plist;
@@ -452,6 +473,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -473,6 +495,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"UniversityHousing/Preview Content\"";
+				DEVELOPMENT_TEAM = P3WNX5V3SZ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = UniversityHousing/Info.plist;
@@ -481,6 +504,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

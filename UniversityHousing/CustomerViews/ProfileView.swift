@@ -15,8 +15,20 @@ struct ProfileView: View {
     @State var isLoginView = false
     @State var url : URL?
     @State var isProfileImage = false
+    @Binding var presentSideMenu : Bool
     var body: some View {
         VStack(spacing: 10){
+            VStack{
+                HStack {
+                    Button(action: {
+                        presentSideMenu.toggle()
+                    }, label: {
+                        Image(systemName: "line.3.horizontal")
+                    })
+                    Spacer()
+                }
+                .padding()
+            }
             AsyncImage(url: url){ path in
                 switch path {
                 case .success(let image):
@@ -86,7 +98,7 @@ struct ProfileView: View {
 
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileView()
+        ProfileView(presentSideMenu: Binding.constant(false))
             .environmentObject(UserSignin())
     }
 }

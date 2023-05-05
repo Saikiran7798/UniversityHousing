@@ -12,63 +12,99 @@ struct LoginView: View {
     @State var password = ""
     @State var isOwner = false
     @State var isCustomer = false
+    @State var isInvalidLogin = false
+    @State var errorMessage = ""
     @EnvironmentObject var user: UserSignin
     var body: some View {
         NavigationView{
             VStack(spacing: 20){
                 VStack{
-                    Text("Welcome!")
-                        .font(.largeTitle)
+                    Image("Image")
+                        .resizable()
+                        .scaledToFit()
+                        .padding(.top, 50)
                 }
-                VStack{
+                VStack(spacing: 20){
+                    Text("Email")
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(Color.blue)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     TextField("Enter Email", text: $emailId)
-                        .padding()
+                        .padding(.vertical, 15)
+                        .padding(.horizontal, 20)
+                        .background(Color.white)
+                        .cornerRadius(10)
                         .overlay(
-                        RoundedRectangle(cornerRadius: 10)
+                            RoundedRectangle(cornerRadius: 10)
                             .stroke(lineWidth: 2)
-                            .foregroundColor(.black))
+                            .foregroundColor(Color.black)
+                                )
+                    Text("Password")
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(Color.blue)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     SecureField("Enter Password", text: $password )
-                        .padding()
+                        .padding(.vertical, 15)
+                        .padding(.horizontal, 20)
+                        .background(Color.white)
+                        .cornerRadius(10)
                         .overlay(
-                        RoundedRectangle(cornerRadius: 10)
+                            RoundedRectangle(cornerRadius: 10)
                             .stroke(lineWidth: 2)
-                            .foregroundColor(.black))
-                    HStack{
-                        
+                            .foregroundColor(Color.black)
+                             )
+                    
+                }
+                .padding()
+                Button("SIGN IN"){
+                    Task(priority: .background) {
+                        let (userType, userID) : (String, String) = try await FirestoreRequests.shared.userSignIn(emailId: emailId, password: password)
+                        DispatchQueue.main.async {
+                            if userType == "error"{                                    isInvalidLogin = true
+                                errorMessage = userID
+                            }
+                            else {
+                                if userType == "Customer" {
+                                    isCustomer = true
+                                }
+                                else {
+                                    isOwner = true
+                                }
+                                self.user.userType = userType
+                                self.user.userId = userID
+                            }
+                        }
                     }
                 }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 20)
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(10)
+                .padding(.horizontal, 20)
+                .alert(isPresented: $isInvalidLogin){
+                    Alert(title: Text("Login Failed"), message: Text("\(errorMessage)"), dismissButton: .default(Text("OK")))
+                }
+                
                 NavigationLink(destination: SignUpView()){
                     Text("Don't have an account? Sign Up")
                 }
                 NavigationLink(destination: ResetPasswordView(), label: {
                     Text("Forgot password")
                 })
-                Button("SIGN IN"){
-                    Task(priority: .background) {
-                        let (userType, userID) : (String, String) = try await FirestoreRequests.shared.userSignIn(emailId: emailId, password: password)
-                        DispatchQueue.main.async {
-                            if userType == "Customer" {
-                                isCustomer = true
-                            }
-                            else {
-                                isOwner = true
-                            }
-                            self.user.userType = userType
-                            self.user.userId = userID
-                        }
-                    }
-                }
-                .padding()
-                .background(.blue)
-                .foregroundColor(.black)
+                Spacer()
+                
                 NavigationLink(destination: OwnerMainView(), isActive: $isOwner, label: {
                     EmptyView()
                 })
-                NavigationLink(destination: CustomerView(), isActive: $isCustomer, label: {
+                NavigationLink(destination: MainTabbedView(), isActive: $isCustomer, label: {
                     EmptyView()
                 })
             }
             .padding()
+            .navigationTitle("")
+            .navigationBarHidden(true)
+            .background(.white)
         }
         .navigationBarBackButtonHidden(true)
     }

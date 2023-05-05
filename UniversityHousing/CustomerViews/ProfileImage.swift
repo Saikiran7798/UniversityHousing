@@ -33,6 +33,7 @@ struct ProfileImage: View {
                     Task {
                         if let data = try? await profileItem?.loadTransferable(type: Data.self) {
                             if let uiImage = UIImage(data: data) {
+                                photoData = data
                                 newImage = Image(uiImage: uiImage)
                                 return
                             }
@@ -54,7 +55,8 @@ struct ProfileImage: View {
                     .frame(height: 300)
             }
             Spacer()
-            Button("Save"){
+            Button(action: {
+                print("user type is \(user.userType)")
                 if user.userType == "Customer" {
                     if let photoData = photoData {
                         print("Entered inside save")
@@ -87,7 +89,9 @@ struct ProfileImage: View {
                         }
                     }
                 }
-            }
+            }, label: {
+                Text("Save")
+            })
             Spacer()
         }
         .navigationBarBackButtonHidden(true)

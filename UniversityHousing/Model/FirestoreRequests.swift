@@ -50,11 +50,17 @@ class FirestoreRequests {
                 usertype = "Owner"
                 userID = user!.user.uid
             }
+            return (usertype, userID)
         } catch let error as NSError {
-            let authError = error as? AuthErrorCode
-            print("Error while signing in \(authError)")
+            switch error.code {
+            case AuthErrorCode.wrongPassword.rawValue:
+                return ("error", "You have entered Wrong Password,Please Try Again with Correct Password or click forgot password to Reset Password")
+            case AuthErrorCode.invalidEmail.rawValue :
+                return("error", "You have entered Invalid Email, Please check your Email and Login Again")
+            default :
+                return ("error", "Something went Wrong, please Tyr again after some time")
+            }
         }
-        return (usertype, userID)
     }
     
     func ownerDetailsSignup(ownerDetails: OwnerDetailsSignUp, userID: String){
