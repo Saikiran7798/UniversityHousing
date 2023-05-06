@@ -16,10 +16,6 @@ class LocalSearch : NSObject, ObservableObject, MKLocalSearchCompleterDelegate {
             return completer
         }()
     @Published var searchResults = [MKLocalSearchCompletion]()
-    /*override init() {
-        super.init()
-        completer.delegate = self
-    }*/
     func search(query : String){
         localSearchCompleter.queryFragment = query
     }

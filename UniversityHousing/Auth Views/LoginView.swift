@@ -15,6 +15,7 @@ struct LoginView: View {
     @State var isInvalidLogin = false
     @State var errorMessage = ""
     @EnvironmentObject var user: UserSignin
+    @State var isSecure = false
     var body: some View {
         NavigationView{
             VStack(spacing: 20){
@@ -29,30 +30,41 @@ struct LoginView: View {
                         .font(.system(size: 18, weight: .bold))
                         .foregroundColor(Color.blue)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    TextField("Enter Email", text: $emailId)
-                        .padding(.vertical, 15)
-                        .padding(.horizontal, 20)
-                        .background(Color.white)
-                        .cornerRadius(10)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
+                    HStack{
+                        Image(systemName: "envelope")
+                        TextField("Enter Email", text: $emailId)
+                    }
+                    .padding(.vertical, 15)
+                    .padding(.horizontal, 20)
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
                             .stroke(lineWidth: 2)
                             .foregroundColor(Color.black)
-                                )
+                    )
                     Text("Password")
                         .font(.system(size: 18, weight: .bold))
                         .foregroundColor(Color.blue)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    SecureField("Enter Password", text: $password )
-                        .padding(.vertical, 15)
-                        .padding(.horizontal, 20)
-                        .background(Color.white)
-                        .cornerRadius(10)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
+                    HStack{
+                        Button(action: {
+                            isSecure.toggle()
+                        }, label: {
+                            Image( systemName: !isSecure ? "eye.slash" : "eye")
+                                .foregroundColor(.black)
+                        })
+                        SecureField("Enter Password", text: $password )
+                    }
+                    .padding(.vertical, 15)
+                    .padding(.horizontal, 20)
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
                             .stroke(lineWidth: 2)
                             .foregroundColor(Color.black)
-                             )
+                    )
                     
                 }
                 .padding()
