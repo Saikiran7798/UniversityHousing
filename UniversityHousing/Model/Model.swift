@@ -14,11 +14,6 @@ class OwnerDetailsSignUp: ObservableObject {
     @Published var firstName = ""
     @Published var lastName = ""
     @Published var phoneNumber = ""
-    @Published var street = ""
-    @Published var aptNo = ""
-    @Published var city = ""
-    @Published var state = ""
-    @Published var zipcode = ""
     var emailId = ""
     
     func toDictionary() -> [String : Any] {
@@ -26,11 +21,6 @@ class OwnerDetailsSignUp: ObservableObject {
             "firstName" : firstName,
             "lastName" : lastName,
             "phoneNumber" : phoneNumber,
-            "street" : street,
-            "aptNo" : aptNo,
-            "city" : city,
-            "state" : state,
-            "zipcode" : zipcode,
             "emailId" : emailId
         ]
     }
@@ -39,11 +29,6 @@ class OwnerDetailsSignUp: ObservableObject {
         firstName = ""
         lastName = ""
         phoneNumber = ""
-        street = ""
-        aptNo = ""
-        city = ""
-        state = ""
-        zipcode = ""
         emailId = ""
     }
 }

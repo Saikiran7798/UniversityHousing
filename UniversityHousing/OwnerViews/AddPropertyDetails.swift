@@ -30,6 +30,10 @@ struct AddPropertyDetails: View {
     @State var isOntapGesture = false
     @State var oldStreetValue = ""
     @State var isButtonDiabled = true
+    @State var isAddressError = true
+    @State var isAddressAlert = false
+    @State var isSelectedImages = false
+    @State var finalAlert = false
     var body: some View {
         if isprogressView {
             ProgressView()
@@ -61,6 +65,7 @@ struct AddPropertyDetails: View {
                                         showScrollView = false
                                     }
                                     else {
+                                        isAddressError = true
                                         showScrollView = true
                                     }
                                 }
@@ -70,6 +75,7 @@ struct AddPropertyDetails: View {
                             else {
                                 searchResults.removeAll()
                                 withAnimation(.easeInOut(duration: 1.0)){
+                                    isAddressError = true
                                     showScrollView = false
                                 }
                             }
@@ -87,6 +93,7 @@ struct AddPropertyDetails: View {
                                                 propertyDetails.state = subString[1]
                                                 searchResults = []
                                                 isOntapGesture = true
+                                                isAddressError = false
                                                 oldStreetValue = propertyDetails.streetAddress
                                                 Task(priority: .background){
                                                     do {
@@ -317,15 +324,38 @@ struct AddPropertyDetails: View {
                     }
                 }
                 Button("Submit") {
-                    //isprogressView = true
                     let syrcLoc = CLLocation(latitude: 43.0389, longitude: -76.1341)
                     let propLoc = CLLocation(latitude: propertyDetails.location.latitude, longitude: propertyDetails.location.longitude)
                     let distance = syrcLoc.distance(from: propLoc) * 0.000621371
                     self.distance = distance
                     if distance > 10 {
+                        print("entered distance")
                         isAlert = true
                     }
-                    if !isAlert {
+                    else {
+                        isAlert = false
+                    }
+                    if selectedImages.count == 0{
+                        isSelectedImages = true
+                    }
+                    else {
+                        isSelectedImages = false
+                    }
+                    if isAddressError {
+                        print("Entered add error")
+                        isAddressAlert = true
+                    }
+                    else {
+                        isAddressAlert = false
+                    }
+                    if isAlert || isSelectedImages || isAddressAlert {
+                        finalAlert = true
+                    }
+                    else {
+                        finalAlert = false
+                    }
+                     if !isAlert && !isSelectedImages && !isAddressError {
+                         print("Entered task")
                         isprogressView = true
                         Task {
                             do {
@@ -343,8 +373,8 @@ struct AddPropertyDetails: View {
                         }
                     }
                 }
-                .alert(isPresented: $isAlert, content: {
-                    Alert(title: Text("Alert"), message: Text(" Your Property Distance is greater Than 10 miles. Please Select a Property Closer to the University").foregroundColor(.red), dismissButton: .default(Text("OK")))
+                .alert(isPresented: $finalAlert, content: {
+                    Alert(title: Text("Alert"), message: Text(" Please make sure that Your Property Distance is less than 10 miles from Syracuse University and make sure to select address from the list and make sure to select atleatst one image").foregroundColor(.red), dismissButton: .default(Text("OK")))
                         
                 })
                 .padding()

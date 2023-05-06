@@ -44,13 +44,8 @@ struct CustomerView: View {
                 .frame(width: 50, height: 5)
                 .padding()
                 .background(.blue)
-                .foregroundColor(.black)
+                .foregroundColor(.white)
                 Spacer()
-                Button(action: {
-                    
-                }, label: {
-                    Text("SortBy")
-                })
             }
             .padding()
             if propertyDetail.count == 0  && allProperties.count == 0 {

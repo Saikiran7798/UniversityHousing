@@ -9,7 +9,7 @@ import SwiftUI
 import PhotosUI
 
 struct OwnerPropertyEditView: View {
-    @ObservedObject var ownerproperty : OwnerPropertyEdit = OwnerPropertyEdit()
+    @State var ownerproperty : OwnerPropertyEdit = OwnerPropertyEdit()
     var propertyID : String
     var ownerID : String
     @State var updatedData : [String : Any] = [:]
@@ -22,6 +22,7 @@ struct OwnerPropertyEditView: View {
     @State var photoPickerItem = [PhotosPickerItem]()
     @State var photoPickerData = [Data]()
     @State var newImages : [UIImage] = []
+    @State var deletedImagesCount = 0
     var body: some View {
         ScrollView{
             VStack(spacing : 20) {
@@ -76,6 +77,9 @@ struct OwnerPropertyEditView: View {
                             Text("Semi Furnished").tag("Semi Furnished")
                             Text("Not Furnished").tag("Not Furnished")
                         }
+                        .onChange(of: ownerproperty.furnished){ newValue in
+                            updatedData["furnished"] = newValue
+                        }
                     }
                     .padding()
                     .overlay(
@@ -90,6 +94,9 @@ struct OwnerPropertyEditView: View {
                             Text("Studio").tag("Studio")
                             Text("Individual House").tag("Individual House")
                         }
+                        .onChange(of: ownerproperty.houseType){ newValue in
+                            updatedData["houseType"] = newValue
+                        }
                     }
                     .padding()
                     .overlay(
@@ -103,6 +110,10 @@ struct OwnerPropertyEditView: View {
                             Text("Yes").tag(true)
                             Text("No").tag(false)
                         }
+                        .onChange(of: ownerproperty.petsAllowed){ newValue in
+                            updatedData["petsAllowed"] = newValue
+                        }
+
                     }
                     .padding()
                     .overlay(
@@ -184,6 +195,7 @@ struct OwnerPropertyEditView: View {
                            isAlert = true
                         }
                         else {
+                            print("entered")
                             Task(priority: .background){
                                 await FirestoreRequests.shared.editPropertyDetails(propertyId : "\(propertyID)", updateData : updatedData, deletedImages: deletedImagesPaths)
                                 if newImages.count != 0 {
@@ -214,6 +226,11 @@ struct OwnerPropertyEditView: View {
                         self.ownerproperty.furnished = propDetail.furnished
                         self.ownerproperty.houseType = propDetail.houseType
                         self.downloadedImagesWithPath = images
+                        self.deletedImagesCount = downloadedImagesWithPath.count
+                        print("count is \(deletedImagesCount)")
+                        print("download count is \(downloadedImagesWithPath.count)")
+                        print("count of dict is \(updatedData.count)")
+                        self.updatedData = [:]
                     }
                 }
             }
