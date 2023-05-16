@@ -13,56 +13,112 @@ struct OwnerProfile: View {
     @State var isLoginView = false
     @State var url : URL?
     @State var isProfileImage = false
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
     var body: some View {
         VStack(spacing: 10){
-            AsyncImage(url: url){ path in
-                switch path {
-                case .success(let image):
-                    NavigationLink(destination: ProfileImage(image: image), label: {
-                        image
-                            .resizable()
-                            .frame(width: 250, height: 250)
-                            .clipShape(Circle())
-                            .padding(.top, 50)
-                            .padding(.bottom,50)
-                    })
-                default:
-                    NavigationLink(destination: ProfileImage(image: Image(systemName: "photo")), label: {
-                        Image(systemName: "photo")
-                            .resizable()
-                            .frame(width: 250, height: 250)
-                            .clipShape(Circle())
-                            .padding(.top, 50)
-                            .padding(.bottom,50)
-                    })
+            if horizontalSizeClass == .compact && verticalSizeClass == .compact {
+                ScrollView {
+                    AsyncImage(url: url){ path in
+                        switch path {
+                        case .success(let image):
+                            NavigationLink(destination: ProfileImage(image: image), label: {
+                                image
+                                    .resizable()
+                                    .frame(width: 250, height: 250)
+                                    .clipShape(Circle())
+                                    .padding(.top, 50)
+                                    .padding(.bottom,50)
+                            })
+                        default:
+                            NavigationLink(destination: ProfileImage(image: Image(systemName: "photo")), label: {
+                                Image(systemName: "photo")
+                                    .resizable()
+                                    .frame(width: 250, height: 250)
+                                    .clipShape(Circle())
+                                    .padding(.top, 50)
+                                    .padding(.bottom,50)
+                            })
+                        }
+                        
+                    }
+                    HStack{
+                        Text("Name: \(ownerDetails?.firstName ?? "") \(ownerDetails?.lastName ?? "")")
+                        Spacer()
+                    }
+                    .padding()
+                    HStack{
+                        Text("EmailId: \(ownerDetails?.emailId ?? "")")
+                        Spacer()
+                    }
+                    .padding()
+                    HStack{
+                        Text("Phone Number: \(ownerDetails?.phoneNumber ?? "")")
+                        Spacer()
+                    }
+                    .padding()
+                    Button("Sign Out") {
+                        user.reset()
+                        isLoginView = true
+                    }
+                    .foregroundColor(.blue)
+                    .padding()
+                    NavigationLink(destination: LoginView(), isActive: $isLoginView) {
+                        EmptyView()
+                    }
+                    Spacer()
                 }
-                
             }
-            HStack{
-                Text("Name: \(ownerDetails?.firstName ?? "") \(ownerDetails?.lastName ?? "")")
+            else {
+                AsyncImage(url: url){ path in
+                    switch path {
+                    case .success(let image):
+                        NavigationLink(destination: ProfileImage(image: image), label: {
+                            image
+                                .resizable()
+                                .frame(width: 250, height: 250)
+                                .clipShape(Circle())
+                                .padding(.top, 50)
+                                .padding(.bottom,50)
+                        })
+                    default:
+                        NavigationLink(destination: ProfileImage(image: Image(systemName: "photo")), label: {
+                            Image(systemName: "photo")
+                                .resizable()
+                                .frame(width: 250, height: 250)
+                                .clipShape(Circle())
+                                .padding(.top, 50)
+                                .padding(.bottom,50)
+                        })
+                    }
+                    
+                }
+                HStack{
+                    Text("Name: \(ownerDetails?.firstName ?? "") \(ownerDetails?.lastName ?? "")")
+                    Spacer()
+                }
+                .padding()
+                HStack{
+                    Text("EmailId: \(ownerDetails?.emailId ?? "")")
+                    Spacer()
+                }
+                .padding()
+                HStack{
+                    Text("Phone Number: \(ownerDetails?.phoneNumber ?? "")")
+                    Spacer()
+                }
+                .padding()
+                Button("Sign Out") {
+                    user.reset()
+                    isLoginView = true
+                }
+                .foregroundColor(.blue)
+                .padding()
+                NavigationLink(destination: LoginView(), isActive: $isLoginView) {
+                    EmptyView()
+                }
                 Spacer()
             }
-            .padding()
-            HStack{
-                Text("EmailId: \(ownerDetails?.emailId ?? "")")
-                Spacer()
-            }
-            .padding()
-            HStack{
-                Text("Phone Number: \(ownerDetails?.phoneNumber ?? "")")
-                Spacer()
-            }
-            .padding()
-            Button("Sign Out") {
-                user.reset()
-                isLoginView = true
-            }
-            .foregroundColor(.blue)
-            .padding()
-            NavigationLink(destination: LoginView(), isActive: $isLoginView) {
-                EmptyView()
-            }
-            Spacer()
         }
         .onAppear(){
             Task(priority: .background){

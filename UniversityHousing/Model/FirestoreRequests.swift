@@ -14,29 +14,27 @@ import UIKit
 
 class FirestoreRequests {
     static let shared = FirestoreRequests()
-    
-    func userSignUP(emailId: String, password: String, userType : String, completion: @escaping(String, String) -> Void) {
-        
-        Auth.auth().createUser(withEmail: emailId, password: password) { result,error in
-            
-            guard let user = result?.user, error == nil else {
-                print("Error creating User")
-                return
-            }
-            completion(user.uid, user.email!)
-            let changeRequest = user.createProfileChangeRequest()
+    func userSignUP(emailId: String, password: String, userType : String) async throws -> (String, String){
+        do {
+            let authResult = try await Auth.auth().createUser(withEmail: emailId, password: password)
+            let changeRequest = authResult.user.createProfileChangeRequest()
             changeRequest.displayName = userType
-            changeRequest.commitChanges(completion: { error in
-                if (error != nil) {
-                    print("Error while setting display name")
-                }
-                else
-                {
-                    print("Success...")
-                }
-            })
+            try await changeRequest.commitChanges()
+            return (authResult.user.uid, authResult.user.email ?? "")
+        } catch let error as NSError {
+            switch error.code {
+            case AuthErrorCode.emailAlreadyInUse.rawValue:
+                return ("error", "The email is already in use by another account.")
+            case AuthErrorCode.weakPassword.rawValue:
+                return ("error", "The password is too weak. It must be at least 6 characters long.")
+            case AuthErrorCode.invalidEmail.rawValue:
+                return ("error", "The email is invalid. Please enter a valid email address.")
+            default:
+                return ("error", "Something went wrong. Please try again later.")
+            }
         }
     }
+    
     func userSignIn(emailId: String, password: String) async throws -> (String, String){
         var usertype = ""
         var userID = ""
@@ -238,7 +236,10 @@ class FirestoreRequests {
         let docRef = db.collection("propertyDetails").document("\(propertyId)")
         let storageRef = Storage.storage().reference()
         do {
+            print("entered firestore")
+            print("data is \(updateData)")
             try await docRef.updateData(updateData)
+            print("Update successfull")
             if deletedImages.count != 0 {
                 for item in deletedImages {
                     let imageRef = storageRef.child("\(item)")

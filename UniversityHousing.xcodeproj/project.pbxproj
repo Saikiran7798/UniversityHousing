@@ -146,6 +146,7 @@
 				4E21F86C2A0237F50016321E /* OwnerPropertyEditView.swift */,
 				4ED1301029DCEF81009E4238 /* OwnerDetailsView.swift */,
 				4E654D7729E26E420097D79E /* AddPropertyDetails.swift */,
+				4E1D1E8E2A032277001612F6 /* FullImageForDelete.swift */,
 			);
 			path = OwnerViews;
 			sourceTree = "<group>";
@@ -166,7 +167,6 @@
 				4E25F86929E928FD0064FC98 /* CustomerViewRow.swift */,
 				4E27FDB829ECDFEB00BF5B2C /* PropertyDetailView.swift */,
 				4E1D1E8C2A02FB9E001612F6 /* FullImage.swift */,
-				4E1D1E8E2A032277001612F6 /* FullImageForDelete.swift */,
 				4E0B594D2A04738900CC4DAB /* FavoriteProperties.swift */,
 			);
 			path = CustomerViews;

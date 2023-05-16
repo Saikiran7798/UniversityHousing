@@ -16,67 +16,134 @@ struct ProfileView: View {
     @State var url : URL?
     @State var isProfileImage = false
     @Binding var presentSideMenu : Bool
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
     var body: some View {
         VStack(spacing: 10){
-            VStack{
-                HStack {
-                    Button(action: {
-                        presentSideMenu.toggle()
-                    }, label: {
-                        Image(systemName: "line.3.horizontal")
-                    })
+            if horizontalSizeClass == .compact && verticalSizeClass == .compact {
+                ScrollView{
+                    VStack{
+                        HStack {
+                            Button(action: {
+                                presentSideMenu.toggle()
+                            }, label: {
+                                Image(systemName: "line.3.horizontal")
+                            })
+                            Spacer()
+                        }
+                        .padding()
+                    }
+                    AsyncImage(url: url){ path in
+                        switch path {
+                        case .success(let image):
+                            NavigationLink(destination: ProfileImage(image: image), label: {
+                                image
+                                    .resizable()
+                                    .frame(width: 250, height: 250)
+                                    .clipShape(Circle())
+                                    .padding(.top, 50)
+                                    .padding(.bottom,50)
+                            })
+                        default:
+                            NavigationLink(destination: ProfileImage(image: Image(systemName: "photo")), label: {
+                                Image(systemName: "photo")
+                                    .resizable()
+                                    .frame(width: 250, height: 250)
+                                    .clipShape(Circle())
+                                    .padding(.top, 50)
+                                    .padding(.bottom,50)
+                            })
+                        }
+                        
+                    }
+                    HStack{
+                        Text("Name: \(customerDetails?.firstName ?? "") \(customerDetails?.lastName ?? "")")
+                        Spacer()
+                    }
+                    .padding()
+                    HStack{
+                        Text("EmailId: \(customerDetails?.emailId ?? "")")
+                        Spacer()
+                    }
+                    .padding()
+                    HStack{
+                        Text("Phone Number: \(customerDetails?.phoneNumber ?? "")")
+                        Spacer()
+                    }
+                    .padding()
+                    Button("Sign Out") {
+                        user.reset()
+                        isLoginView = true
+                    }
+                    .foregroundColor(.blue)
+                    .padding()
+                    NavigationLink(destination: LoginView(), isActive: $isLoginView) {
+                        EmptyView()
+                    }
+                    Spacer()
+                }
+            }
+            else {
+                VStack{
+                    HStack {
+                        Button(action: {
+                            presentSideMenu.toggle()
+                        }, label: {
+                            Image(systemName: "line.3.horizontal")
+                        })
+                        Spacer()
+                    }
+                    .padding()
+                }
+                AsyncImage(url: url){ path in
+                    switch path {
+                    case .success(let image):
+                        NavigationLink(destination: ProfileImage(image: image), label: {
+                            image
+                                .resizable()
+                                .frame(width: 250, height: 250)
+                                .clipShape(Circle())
+                                .padding(.top, 50)
+                                .padding(.bottom,50)
+                        })
+                    default:
+                        NavigationLink(destination: ProfileImage(image: Image(systemName: "photo")), label: {
+                            Image(systemName: "photo")
+                                .resizable()
+                                .frame(width: 250, height: 250)
+                                .clipShape(Circle())
+                                .padding(.top, 50)
+                                .padding(.bottom,50)
+                        })
+                    }
+                    
+                }
+                HStack{
+                    Text("Name: \(customerDetails?.firstName ?? "") \(customerDetails?.lastName ?? "")")
                     Spacer()
                 }
                 .padding()
-            }
-            AsyncImage(url: url){ path in
-                switch path {
-                case .success(let image):
-                    NavigationLink(destination: ProfileImage(image: image), label: {
-                        image
-                            .resizable()
-                            .frame(width: 250, height: 250)
-                            .clipShape(Circle())
-                            .padding(.top, 50)
-                            .padding(.bottom,50)
-                    })
-                default:
-                    NavigationLink(destination: ProfileImage(image: Image(systemName: "photo")), label: {
-                        Image(systemName: "photo")
-                            .resizable()
-                            .frame(width: 250, height: 250)
-                            .clipShape(Circle())
-                            .padding(.top, 50)
-                            .padding(.bottom,50)
-                    })
+                HStack{
+                    Text("EmailId: \(customerDetails?.emailId ?? "")")
+                    Spacer()
                 }
-                
-            }
-            HStack{
-                Text("Name: \(customerDetails?.firstName ?? "") \(customerDetails?.lastName ?? "")")
+                .padding()
+                HStack{
+                    Text("Phone Number: \(customerDetails?.phoneNumber ?? "")")
+                    Spacer()
+                }
+                .padding()
+                Button("Sign Out") {
+                    user.reset()
+                    isLoginView = true
+                }
+                .foregroundColor(.blue)
+                .padding()
+                NavigationLink(destination: LoginView(), isActive: $isLoginView) {
+                    EmptyView()
+                }
                 Spacer()
             }
-            .padding()
-            HStack{
-                Text("EmailId: \(customerDetails?.emailId ?? "")")
-                Spacer()
-            }
-            .padding()
-            HStack{
-                Text("Phone Number: \(customerDetails?.phoneNumber ?? "")")
-                Spacer()
-            }
-            .padding()
-            Button("Sign Out") {
-                user.reset()
-                isLoginView = true
-            }
-            .foregroundColor(.blue)
-            .padding()
-            NavigationLink(destination: LoginView(), isActive: $isLoginView) {
-                EmptyView()
-            }
-            Spacer()
         }
         .onAppear(){
             Task(priority: .background){

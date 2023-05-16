@@ -11,6 +11,8 @@ struct OwnerMainView: View {
     @EnvironmentObject var user: UserSignin
     @State var propDetails : [OwnerPropertyDetail] = []
     @State var isAddProperty = false
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
     var body: some View {
         VStack {
             HStack{
@@ -21,29 +23,56 @@ struct OwnerMainView: View {
                 })
             }
             .padding()
-            .padding(.bottom,20)
+            //.padding(.bottom,20)
             Text("My Properties")
                 .font(.title)
-            ScrollView {
-                ForEach(propDetails, id: \.self) { item in
-                    OwnerPropertiesView(title: item.title, url: item.propertyImageURL, bedrooms: item.bedrooms, rent: item.rent, furnished: item.furnished, proprtyId: item.propertyID, ownerID: user.userId, onDelete: { index in
-                        propDetails.remove(at: index)
-                    }, index: propDetails.firstIndex(of: item)!)
-                        
+            if horizontalSizeClass == .compact && verticalSizeClass == .compact {
+                ScrollView {
+                    ForEach(propDetails, id: \.self) { item in
+                        OwnerPropertiesView(title: item.title, url: item.propertyImageURL, bedrooms: item.bedrooms, rent: item.rent, furnished: item.furnished, proprtyId: item.propertyID, ownerID: user.userId, onDelete: { index in
+                            propDetails.remove(at: index)
+                        }, index: propDetails.firstIndex(of: item)!)
+                            
+                    }
                 }
+                .frame(height: 200)
             }
-            .frame(height: 400)
-            Spacer()
-            Button("Add Property"){
-                isAddProperty = true
+            else {
+                ScrollView {
+                    ForEach(propDetails, id: \.self) { item in
+                        OwnerPropertiesView(title: item.title, url: item.propertyImageURL, bedrooms: item.bedrooms, rent: item.rent, furnished: item.furnished, proprtyId: item.propertyID, ownerID: user.userId, onDelete: { index in
+                            propDetails.remove(at: index)
+                        }, index: propDetails.firstIndex(of: item)!)
+                            
+                    }
+                }
+                .frame(height: 500)
+                Spacer()
             }
-            .padding()
-            .background(.blue)
-            .foregroundColor(.black)
-            NavigationLink(destination: AddPropertyDetails(), isActive: $isAddProperty, label: {
-                EmptyView()
-            })
-            Spacer()
+            if horizontalSizeClass == .compact && verticalSizeClass == .compact {
+                Button("Add Property"){
+                    isAddProperty = true
+                }
+                .padding()
+                .background(.blue)
+                .foregroundColor(.white)
+                NavigationLink(destination: AddPropertyDetails(), isActive: $isAddProperty, label: {
+                    EmptyView()
+                })
+                Spacer()
+            }
+            else {
+                Button("Add Property"){
+                    isAddProperty = true
+                }
+                .padding()
+                .background(.blue)
+                .foregroundColor(.white)
+                NavigationLink(destination: AddPropertyDetails(), isActive: $isAddProperty, label: {
+                    EmptyView()
+                })
+                Spacer()
+            }
         }
         .onAppear(){
             Task(priority: .background){
