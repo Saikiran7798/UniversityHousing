@@ -18,7 +18,7 @@ struct OwnerPropertiesView: View {
     var ownerID : String
     var onDelete : ((Int) -> Void)
     var index: Int
-    @State var isPresented = false
+    //@State var isPresented = false
     var body: some View {
         HStack(spacing:20) {
             AsyncImage(url: url){ path in
@@ -41,9 +41,11 @@ struct OwnerPropertiesView: View {
                     Text(title)
                     Spacer()
                     Button(action: {
-                        isPresented = true
+                        //isPresented = true
                     }, label: {
-                        Image(systemName: "pencil")
+                        NavigationLink(destination: OwnerPropertyEditView(propertyID: "\(proprtyId)", ownerID: "\(ownerID)"),label: {
+                            Image(systemName: "pencil")
+                        })
                     })
                     Button(action: {
                         Task(priority: .background){
@@ -54,9 +56,6 @@ struct OwnerPropertiesView: View {
                         onDelete(index)
                     }, label: {
                         Image(systemName: "trash")
-                    })
-                    NavigationLink(destination: OwnerPropertyEditView(propertyID: "\(proprtyId)", ownerID: "\(ownerID)"), isActive: $isPresented, label: {
-                        EmptyView()
                     })
                 }
                 HStack {

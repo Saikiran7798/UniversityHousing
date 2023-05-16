@@ -236,7 +236,10 @@ class FirestoreRequests {
         let docRef = db.collection("propertyDetails").document("\(propertyId)")
         let storageRef = Storage.storage().reference()
         do {
+            print("entered firestore")
+            print("data is \(updateData)")
             try await docRef.updateData(updateData)
+            print("Update successfull")
             if deletedImages.count != 0 {
                 for item in deletedImages {
                     let imageRef = storageRef.child("\(item)")

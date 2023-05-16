@@ -363,8 +363,8 @@ struct AddPropertyDetails: View {
                                 DispatchQueue.main.async {
                                     self.propertyDetails.reset()
                                     if propID {
-                                        isOwnerView = true
                                         isprogressView = false
+                                        isOwnerView = true
                                     }
                                 }
                             } catch {
