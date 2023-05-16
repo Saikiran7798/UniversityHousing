@@ -30,7 +30,7 @@ struct OwnerPropertyEditView: View {
         ScrollView{
             if isProgresssView {
                 if isUpdating{
-                    ProgressView("Updating...")
+                    ProgressView("Updating Property Details...")
                 }
                 else {
                     ProgressView("Loading...")
